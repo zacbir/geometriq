@@ -1,6 +1,6 @@
 import pyx
 
-from canvas import BaseCanvas
+from .base_canvas import BaseCanvas
 
 
 class PyxCanvas(BaseCanvas):
