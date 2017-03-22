@@ -1,6 +1,6 @@
 import canvas as pythonista_canvas
 
-from .canvas import BaseCanvas
+from .base_canvas import BaseCanvas
 
 
 class PythonistaCanvas(BaseCanvas):
@@ -23,7 +23,7 @@ class PythonistaCanvas(BaseCanvas):
 
     def fill_background(self):
         self.begin_path()
-        self.canvas.add_rect(self.width, self.height)
+        self.canvas.add_rect(0, 0, self.width, self.height)
         self.canvas.fill_path()
         self.end_path()
 
@@ -45,8 +45,9 @@ class PythonistaCanvas(BaseCanvas):
     def polygon(self, points):
         self.begin_path()
         self.move_to(points[0])
-        for start, end in points[1:]:
-            self.draw_line_to(end)
+        for point in points[1:]:
+            self.draw_line_to(point)
+            self.move_to(point)
         self.end_path()
 
     def draw_circle(self, center, radius):
