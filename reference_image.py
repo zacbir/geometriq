@@ -3,8 +3,8 @@ from array import array
 from Quartz.CoreGraphics import *
 from Quartz.ImageIO import *
 
-from colors import Color
-from shapes import Point
+from .colors import Color
+from .shapes import Point
 
 
 class ReferenceImage(object):
