@@ -1,4 +1,4 @@
-from colors import Color
+from .colors import Color
 
 """
 SOLARIZED HEX     16/8 TERMCOL  XTERM/HEX   L*A*B      RGB         HSB
