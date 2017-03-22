@@ -2,8 +2,8 @@ from datetime import datetime
 
 from PIL import Image, ImageDraw
 
-from canvas import BaseCanvas
-from shapes import Point
+from .base_canvas import BaseCanvas
+from ..shapes import Point
 
 
 class PillowCanvas(BaseCanvas):
