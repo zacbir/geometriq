@@ -1,6 +1,6 @@
 from math import sqrt, ceil
 
-from shapes import Point
+from .shapes import Point
 
 
 class Grid(object):
