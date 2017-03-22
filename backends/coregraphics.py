@@ -3,7 +3,7 @@ from Quartz.ImageIO import *
 
 from datetime import datetime
 
-from canvas import BaseCanvas
+from .base_canvas import BaseCanvas
 
 
 class CoreGraphicsCanvas(BaseCanvas):
