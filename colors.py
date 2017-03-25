@@ -27,6 +27,12 @@ class Color(object):
     def tint(self):
         return self.__class__(self.r, self.g, self.b, 1 - random.random() * 0.5)
 
+    def half(self):
+        return self.__class__(self.r, self.g, self.b, 0.5)
+
+    def hair(self):
+        return self.__class__(self.r, self.g, self.b, 0.1)
+
     def distance_to(self, other_color):
         return sqrt((other_color.r - self.r)**2 + (other_color.g - self.g)**2 + (other_color.b - self.b)**2) # + (other_color.a - self.a)**2)
 
