@@ -1,4 +1,5 @@
 from array import array
+import os.path
 
 from Quartz.CoreGraphics import *
 from Quartz.ImageIO import *
@@ -8,10 +9,19 @@ from .shapes import Point
 
 
 class ReferenceImage(object):
+
+    data_provider_func = {
+        '.png': CGImageCreateWithPNGDataProvider,
+        '.jpg': CGImageCreateWithJPEGDataProvider,
+        '.jpeg': CGImageCreateWithJPEGDataProvider,
+    }
+
     def __init__(self, image_path, canvas):
         self.canvas = canvas
         data_provider = CGDataProviderCreateWithFilename(image_path)
-        self.image = CGImageCreateWithJPEGDataProvider(data_provider, None, False, kCGRenderingIntentDefault)
+        ext = os.path.splitext(image_path)[-1].lower()
+        image_func = self.data_provider_func[ext]
+        self.image = image_func(data_provider, None, False, kCGRenderingIntentDefault)
         self.width = CGImageGetWidth(self.image)
         self.height = CGImageGetHeight(self.image)
         color_space = CGColorSpaceCreateDeviceRGB()
@@ -27,8 +37,8 @@ class ReferenceImage(object):
         """
         Currently assumes our canvas and our image share an aspect ratio, better transforms TK
         """
-        from_width, from_height = self.canvas.width, self.canvas.height
-        to_width, to_height = self.width, self.height
+        from_width, from_height = float(self.canvas.width), float(self.canvas.height)
+        to_width, to_height = float(self.width), float(self.height)
         from_aspect = from_width / from_height
         to_aspect = to_width / to_height
         return Point(point.x * (to_width / from_width), point.y * (to_height / from_height))
@@ -39,7 +49,7 @@ class ReferenceImage(object):
         byte_index = int((self.bytes_per_row * translated_y) + (x * self.bytes_per_pixel))
         try:
             red, green, blue, alpha = self.raw_data[byte_index:byte_index + 4]
-        except ValueError: # out of the images bounds, hand back clear
+        except ValueError:  # out of the images bounds, hand back clear
             red = green = blue = alpha = 0.0
 
         return Color.from_full_value(red, green, blue, alpha)
