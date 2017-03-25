@@ -58,9 +58,10 @@ class Shape(object):
     [<Point x: 2, y: 1>]
     """
 
-    def __init__(self, center, size):
+    def __init__(self, center, size, grid=None):
         self.center = center
         self.size = size
+        self.grid = grid
         self.points = []
 
     def paths(self):
@@ -75,6 +76,8 @@ class Shape(object):
         return paths
 
     def add_point(self, point):
+        if self.grid:
+            point = self.grid.closest_point_to(point)
         self.points.append(point)
 
     def draw(self, canvas):
@@ -92,11 +95,12 @@ class Circle(Shape):
 
 class Triangle(Shape):
 
-    def __init__(self, center, size):
-        super(Triangle, self).__init__(center, size)
+    def __init__(self, center, size, grid=None):
+        super(Triangle, self).__init__(center, size, grid)
 
         self.step = sqrt(self.size**2 - (self.size / 2)**2)
         self.r = sqrt(3) * self.size / 6
+        self.grid = grid
 
         self._setup_points()
 
@@ -109,12 +113,10 @@ class NorthTriangle(Triangle):
     def _setup_points(self):
         x, y = self.center.x, self.center.y
 
-        points = (
+        [self.add_point(x) for x in (
             Point(x - (self.size / 2), y - self.r),
             Point(x, y + (self.step - self.r)),
-            Point(x + (self.size / 2), y - self.r))
-
-        [self.add_point(x) for x in points]
+            Point(x + (self.size / 2), y - self.r))]
 
 
 class EastTriangle(Triangle):
@@ -185,8 +187,8 @@ class Diamond(Shape):
 
 class Hexagon(Shape):
 
-    def __init__(self, center, size):
-        super(Hexagon, self).__init__(center, size)
+    def __init__(self, center, size, grid=None):
+        super(Hexagon, self).__init__(center, size, grid)
 
         self.step = sqrt(self.size**2 - (self.size / 2)**2)
 
