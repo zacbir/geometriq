@@ -29,6 +29,10 @@ class Grid(object):
 
         return mirror
 
+    def closest_point_to(self, other_point):
+        distance, point = min([(x.distance_to(other_point), x) for x in self.points])
+        return point
+
 
 class SquareGrid(Grid):
     """ A grid of points arranged in squares.
