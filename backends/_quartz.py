@@ -159,17 +159,33 @@ CGContextAddRect = quartz.CGContextAddRect
 CGContextDrawImage = quartz.CGContextDrawImage
 CGContextDrawPath = quartz.CGContextDrawPath
 CGContextSetLineWidth = quartz.CGContextSetLineWidth
+
+#void CGContextSetRGBFillColor(CGContextRef c, CGFloat red, CGFloat green, CGFloat blue, CGFloat alpha);
 CGContextSetRGBFillColor = quartz.CGContextSetRGBFillColor
+CGContextSetRGBFillColor.argtypes=[c_void_p, CGFloat, CGFloat, CGFloat, CGFloat]
 CGContextSetRGBStrokeColor = quartz.CGContextSetRGBStrokeColor
+CGContextSetRGBStrokeColor.argtypes=[c_void_p, CGFloat, CGFloat, CGFloat, CGFloat]
+
 CGDataProviderCreateWithFilename = quartz.CGDataProviderCreateWithFilename
 CGImageCreateWithJPEGDataProvider = quartz.CGImageCreateWithJPEGDataProvider
 CGImageCreateWithPNGDataProvider = quartz.CGImageCreateWithPNGDataProvider
 CGImageDestinationAddImage = quartz.CGImageDestinationAddImage
-CGImageDestinationCreateWithURL = quartz.CGImageDestinationCreateWithURL
+#CGImageDestinationCreateWithURL = quartz.CGImageDestinationCreateWithURL
 CGImageDestinationFinalize = quartz.CGImageDestinationFinalize
 CGImageGetHeight = quartz.CGImageGetHeight
 CGImageGetWidth = quartz.CGImageGetWidth
+
+
+#void CGPathAddLineToPoint(CGMutablePathRef path, const CGAffineTransform *m, CGFloat x, CGFloat y);
 CGPathAddLineToPoint = quartz.CGPathAddLineToPoint
+CGPathAddLineToPoint.argtypes=[c_void_p, c_void_p, CGFloat, CGFloat]
 CGPathCreateMutable = quartz.CGPathCreateMutable
+
+#void CGPathMoveToPoint(CGMutablePathRef path, const CGAffineTransform *m, CGFloat x, CGFloat y);
 CGPathMoveToPoint = quartz.CGPathMoveToPoint
+CGPathMoveToPoint.argtypes=[c_void_p, c_void_p, CGFloat, CGFloat]
 #CGRectMake = quartz.CGRectMake
+
+def CGImageDestinationCreateWithURL(a,b,c,d):
+	#arg 2 needs to be nsstring
+	quartz.CGImageDestinationCreateWithURL(a,ns(b),c,d)
