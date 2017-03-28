@@ -58,10 +58,6 @@ CGBitmapInfo = c_uint32  # CGImage.h
 kCGImagePropertyGIFDictionary = c_void_p.in_dll(quartz, 'kCGImagePropertyGIFDictionary')
 kCGImagePropertyGIFDelayTime = c_void_p.in_dll(quartz, 'kCGImagePropertyGIFDelayTime')
 
-# /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
-#     CoreGraphics.framework/Headers/CGColorSpace.h
-kCGRenderingIntentDefault = 0
-
 quartz.CGImageSourceCreateWithData.restype = c_void_p
 quartz.CGImageSourceCreateWithData.argtypes = [c_void_p, c_void_p]
 
