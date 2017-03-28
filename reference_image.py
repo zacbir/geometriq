@@ -1,7 +1,7 @@
 from array import array
 import os.path
 
-from .backends.coregraphics import *
+from .backends.quartz import *
 from .colors import Color
 from .shapes import Point
 

@@ -8,7 +8,7 @@ class CoreGraphicsCanvas(BaseCanvas):
     def __init__(self, name, width, height):
         super(CoreGraphicsCanvas, self).__init__(name, width, height)
 
-        self.colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceSRGB)
+        self.colorSpace = CGColorSpaceCreateDeviceRGB()
         self.context = CGBitmapContextCreate(None, width, height, 8, width * 4, self.colorSpace, kCGImageAlphaPremultipliedLast)
         self.path = None
 
@@ -25,7 +25,7 @@ class CoreGraphicsCanvas(BaseCanvas):
         CGContextSetRGBFillColor(self.context, *self.fill_color.rgba())
 
     def fill_background(self):
-        r = CGRectMake(0, 0, self.width, self.height)
+        r = CGRect((0, 0), (self.width, self.height))
         CGContextAddRect(self.context, r)
         CGContextDrawPath(self.context, kCGPathFillStroke)
 
@@ -53,13 +53,13 @@ class CoreGraphicsCanvas(BaseCanvas):
     def draw_circle(self, center, radius):
         self.begin_path()
         CGContextAddEllipseInRect(self.context,
-                                  CGRectMake(center.x - radius, center.y - radius, radius * 2, radius * 2))
+                                  CGRect((center.x - radius, center.y - radius), (radius * 2, radius * 2)))
         self.end_path()
 
     def save(self):
         image = CGBitmapContextCreateImage(self.context)
         filename = "{}{}.png".format(self.name, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'))
-        url = CFURLCreateFromFileSystemRepresentation(None, filename, len(filename), False)
+        url=NSURL.fileURLWithPath_(filename)
         dest = CGImageDestinationCreateWithURL(url, 'public.png', 1, None)
         CGImageDestinationAddImage(dest, image, None)
         CGImageDestinationFinalize(dest)
