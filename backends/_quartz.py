@@ -137,6 +137,7 @@ quartz.CGContextSetShouldAntialias.argtypes = [c_void_p, c_bool]
 #these are needed because argtypes are not all voids
 quartz.CGImageDestinationCreateWithURL.argtypes=[c_void_p,c_void_p,c_int,c_void_p]
 quartz.CGContextSetRGBFillColor.argtypes=[c_void_p, CFFloat, CFFloat, CFFloat, CFFloat]
+quartz.CGContextSetRGBStrokeColor.argtypes=[c_void_p, CFFloat, CFFloat, CFFloat, CFFloat]
 quartz.CGColorSpaceCreateWithName.argtypes=[c_void_p]
 quartz.CFURLCreateFromFileSystemRepresentation.argtypes=[c_void_p,c_char_p,c_size_t,c_bool]
 
