@@ -170,7 +170,7 @@ CGDataProviderCreateWithFilename = quartz.CGDataProviderCreateWithFilename
 CGImageCreateWithJPEGDataProvider = quartz.CGImageCreateWithJPEGDataProvider
 CGImageCreateWithPNGDataProvider = quartz.CGImageCreateWithPNGDataProvider
 CGImageDestinationAddImage = quartz.CGImageDestinationAddImage
-CGImageDestinationCreateWithURL = quartz.CGImageDestinationCreateWithURL
+#CGImageDestinationCreateWithURL = quartz.CGImageDestinationCreateWithURL
 CGImageDestinationFinalize = quartz.CGImageDestinationFinalize
 CGImageGetHeight = quartz.CGImageGetHeight
 CGImageGetWidth = quartz.CGImageGetWidth
@@ -185,3 +185,7 @@ CGPathCreateMutable = quartz.CGPathCreateMutable
 CGPathMoveToPoint = quartz.CGPathMoveToPoint
 CGPathMoveToPoint.argtypes=[c_void_p, c_void_p, CGFloat, CGFloat]
 #CGRectMake = quartz.CGRectMake
+
+def CGImageDestinationCreateWithURL(a,b,c,d):
+	#arg 2 needs to be nsstring
+	quartz.CGImageDestinationCreateWithURL(a,ns(b),c,d)
