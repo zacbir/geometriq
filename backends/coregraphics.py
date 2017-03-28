@@ -1,8 +1,6 @@
-from Quartz.CoreGraphics import *
-from Quartz.ImageIO import *
-
 from datetime import datetime
 
+from .quartz import *
 from .base_canvas import BaseCanvas
 
 

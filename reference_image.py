@@ -1,9 +1,7 @@
 from array import array
 import os.path
 
-from Quartz.CoreGraphics import *
-from Quartz.ImageIO import *
-
+from .backends.coregraphics import *
 from .colors import Color
 from .shapes import Point
 
