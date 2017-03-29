@@ -8,58 +8,24 @@ if sizeof(c_size_t) == 8:
 else:
     CFFloat = c_float
 
+quartz = c
+
 ##############
 # Constants
 #
 
-kCGColorSpaceSRGB=ObjCInstance(c_void_p.in_dll(quartz,'kCGColorSpaceSRGB'))
-kCGImageAlphaPremultipliedLast=1
-kCGPathFillStroke=3
-kCGRenderingIntentDefault=0
+kCGColorSpaceSRGB = ObjCInstance(c_void_p.in_dll(quartz, 'kCGColorSpaceSRGB'))
+kCGImageAlphaPremultipliedLast = 1
+kCGPathFillStroke = 3
+kCGRenderingIntentDefault = 0
 
 ##############
 # Functions
 
-"""
-
-CFURLCreateFromFileSystemRepresentation
-CGBitmapContextCreate
-CGBitmapContextCreateImage
-CGColorSpaceCreateDeviceRGB
-CGColorSpaceCreateWithName
-CGContextAddEllipseInRect
-CGContextAddPath
-CGContextAddRect
-CGContextDrawImage
-CGContextDrawPath
-CGContextSetLineWidth
-CGContextSetRGBFillColor
-CGContextSetRGBStrokeColor
-CGDataProviderCreateWithFilename
-CGImageCreateWithJPEGDataProvider
-CGImageCreateWithPNGDataProvider
-CGImageDestinationAddImage
-CGImageDestinationCreateWithURL
-CGImageDestinationFinalize
-CGImageGetHeight
-CGImageGetWidth
-CGPathAddLineToPoint
-CGPathCreateMutable
-CGPathMoveToPoint
-CGRectMake
-
-"""
-
-######################################################################
-
-# QUARTZ / COREGRAPHICS
-
-quartz = c
-
 quartz.CFURLCreateFromFileSystemRepresentation.argtypes = [c_void_p, c_char_p, c_size_t, c_bool]
 
 quartz.CGBitmapContextCreate.restype = c_void_p
-quartz.CGBitmapContextCreate.argtypes = [c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, CGBitmapInfo]
+quartz.CGBitmapContextCreate.argtypes = [c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, c_size_t]  #
 
 quartz.CGImageSourceCreateImageAtIndex.restype = c_void_p
 quartz.CGImageSourceCreateImageAtIndex.argtypes = [c_void_p, c_size_t, c_void_p]
@@ -71,7 +37,10 @@ quartz.CGColorSpaceCreateWithName.restype = c_void_p
 quartz.CGColorSpaceCreateWithName.argtypes = [c_void_p]
 
 quartz.CGContextAddEllipseInRect.argtypes = [c_void_p, CGRect]
+
 quartz.CGContextAddPath.argtypes = [c_void_p, c_void_p]
+
+quartz.CGContextAddRect.argtypes = [c_void_p, CGRect]
 
 quartz.CGContextDrawImage.restype = None
 quartz.CGContextDrawImage.argtypes = [c_void_p, CGRect, c_void_p]
@@ -86,10 +55,10 @@ quartz.CGDataProviderCreateWithFilename.restype = c_void_p
 quartz.CGDataProviderCreateWithFilename.argtypes = [c_char_p]  # Double check
 
 quartz.CGImageCreateWithJPEGDataProvider.restype = c_void_p
-quartz.CGImageCreateWithJPEGDataProvider.argtypes = [c_void_p, CFFloat, c_bool, CGColorRenderingIntent]  # Double check
+quartz.CGImageCreateWithJPEGDataProvider.argtypes = [c_void_p, CFFloat, c_bool, c_size_t]  # Double check
 
 quartz.CGImageCreateWithPNGDataProvider.restype = c_void_p
-quartz.CGImageCreateWithPNGDataProvider.argtypes = [c_void_p, CFFloat, c_bool, CGColorRenderingIntent]  # Double check
+quartz.CGImageCreateWithPNGDataProvider.argtypes = [c_void_p, CFFloat, c_bool, c_size_t]  # Double check
 
 quartz.CGImageDestinationAddImage.argtypes = [c_void_p, c_void_p, c_void_p]  # Double check
 
@@ -115,6 +84,7 @@ CGColorSpaceCreateDeviceRGB = quartz.CGColorSpaceCreateDeviceRGB
 CGColorSpaceCreateWithName = quartz.CGColorSpaceCreateWithName
 CGContextAddEllipseInRect = quartz.CGContextAddEllipseInRect
 CGContextAddPath = quartz.CGContextAddPath
+CGContextAddRect = quartz.CGContextAddRect
 CGContextDrawImage = quartz.CGContextDrawImage
 CGContextSetLineWidth = quartz.CGContextSetLineWidth
 CGContextSetRGBFillColor = quartz.CGContextSetRGBFillColor
