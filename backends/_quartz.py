@@ -45,6 +45,8 @@ quartz.CGContextAddRect.argtypes = [c_void_p, CGRect]
 quartz.CGContextDrawImage.restype = None
 quartz.CGContextDrawImage.argtypes = [c_void_p, CGRect, c_void_p]
 
+quartz.CGContextDrawPath.argtypes = [c_void_p, c_size_t]
+
 quartz.CGContextSetLineWidth.argtypes = [c_void_p, CFFloat]
 
 quartz.CGContextSetRGBFillColor.argtypes = [c_void_p, CFFloat, CFFloat, CFFloat, CFFloat]
@@ -86,6 +88,7 @@ CGContextAddEllipseInRect = quartz.CGContextAddEllipseInRect
 CGContextAddPath = quartz.CGContextAddPath
 CGContextAddRect = quartz.CGContextAddRect
 CGContextDrawImage = quartz.CGContextDrawImage
+CGContextDrawPath = quartz.CGContextDrawPath
 CGContextSetLineWidth = quartz.CGContextSetLineWidth
 CGContextSetRGBFillColor = quartz.CGContextSetRGBFillColor
 CGContextSetRGBStrokeColor = quartz.CGContextSetRGBStrokeColor
