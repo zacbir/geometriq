@@ -1,9 +1,26 @@
-"""
+from ctypes import *
+from ctypes import util
 
-kCGColorSpaceSRGB
-kCGImageAlphaPremultipliedLast
-kCGPathFillStroke
-kCGRenderingIntentDefault
+from objc_util import *
+
+if sizeof(c_size_t) == 8:
+    CFFloat = c_double
+else:
+    CFFloat = c_float
+
+##############
+# Constants
+#
+
+kCGColorSpaceSRGB=ObjCInstance(c_void_p.in_dll(quartz,'kCGColorSpaceSRGB'))
+kCGImageAlphaPremultipliedLast=1
+kCGPathFillStroke=3
+kCGRenderingIntentDefault=0
+
+##############
+# Functions
+
+"""
 
 CFURLCreateFromFileSystemRepresentation
 CGBitmapContextCreate
@@ -33,120 +50,63 @@ CGRectMake
 
 """
 
-from ctypes import *
-from ctypes import util
-
-from objc_util import *
-
-if sizeof(c_size_t)==8:
-	CFFloat=c_double
-else:
-	CFFloat=c_float
-
 ######################################################################
 
 # QUARTZ / COREGRAPHICS
 
 quartz = c
 
-CGDirectDisplayID = c_uint32  # CGDirectDisplay.h
-CGError = c_int32  # CGError.h
-CGBitmapInfo = c_uint32  # CGImage.h
-
-# /System/Library/Frameworks/ApplicationServices.framework/Frameworks/...
-#     ImageIO.framework/Headers/CGImageProperties.h
-kCGImagePropertyGIFDictionary = c_void_p.in_dll(quartz, 'kCGImagePropertyGIFDictionary')
-kCGImagePropertyGIFDelayTime = c_void_p.in_dll(quartz, 'kCGImagePropertyGIFDelayTime')
-
-quartz.CGImageSourceCreateWithData.restype = c_void_p
-quartz.CGImageSourceCreateWithData.argtypes = [c_void_p, c_void_p]
-
-quartz.CGImageSourceCreateImageAtIndex.restype = c_void_p
-quartz.CGImageSourceCreateImageAtIndex.argtypes = [c_void_p, c_size_t, c_void_p]
-
-quartz.CGImageSourceCopyPropertiesAtIndex.restype = c_void_p
-quartz.CGImageSourceCopyPropertiesAtIndex.argtypes = [c_void_p, c_size_t, c_void_p]
-
-quartz.CGImageGetDataProvider.restype = c_void_p
-quartz.CGImageGetDataProvider.argtypes = [c_void_p]
-
-quartz.CGDataProviderCopyData.restype = c_void_p
-quartz.CGDataProviderCopyData.argtypes = [c_void_p]
-
-quartz.CGDataProviderCreateWithCFData.restype = c_void_p
-quartz.CGDataProviderCreateWithCFData.argtypes = [c_void_p]
-
-quartz.CGImageCreate.restype = c_void_p
-quartz.CGImageCreate.argtypes = [c_size_t, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, c_uint32, c_void_p, c_void_p, c_bool, c_int]
-
-quartz.CGImageRelease.restype = None
-quartz.CGImageRelease.argtypes = [c_void_p]
-
-quartz.CGImageGetBytesPerRow.restype = c_size_t
-quartz.CGImageGetBytesPerRow.argtypes = [c_void_p]
-
-quartz.CGImageGetWidth.restype = c_size_t
-quartz.CGImageGetWidth.argtypes = [c_void_p]
-
-quartz.CGImageGetHeight.restype = c_size_t
-quartz.CGImageGetHeight.argtypes = [c_void_p]
-
-quartz.CGImageGetBitsPerPixel.restype = c_size_t
-quartz.CGImageGetBitsPerPixel.argtypes = [c_void_p]
-
-quartz.CGImageGetBitmapInfo.restype = CGBitmapInfo
-quartz.CGImageGetBitmapInfo.argtypes = [c_void_p]
-
-quartz.CGColorSpaceCreateDeviceRGB.restype = c_void_p
-quartz.CGColorSpaceCreateDeviceRGB.argtypes = []
-
-quartz.CGDataProviderRelease.restype = None
-quartz.CGDataProviderRelease.argtypes = [c_void_p]
-
-quartz.CGColorSpaceRelease.restype = None
-quartz.CGColorSpaceRelease.argtypes = [c_void_p]
+quartz.CFURLCreateFromFileSystemRepresentation.argtypes = [c_void_p, c_char_p, c_size_t, c_bool]
 
 quartz.CGBitmapContextCreate.restype = c_void_p
 quartz.CGBitmapContextCreate.argtypes = [c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, CGBitmapInfo]
 
-quartz.CGBitmapContextCreateImage.restype = c_void_p
-quartz.CGBitmapContextCreateImage.argtypes = [c_void_p]
+quartz.CGImageSourceCreateImageAtIndex.restype = c_void_p
+quartz.CGImageSourceCreateImageAtIndex.argtypes = [c_void_p, c_size_t, c_void_p]
 
-quartz.CGFontCreateWithDataProvider.restype = c_void_p
-quartz.CGFontCreateWithDataProvider.argtypes = [c_void_p]
+quartz.CGColorSpaceCreateDeviceRGB.restype = c_void_p
+quartz.CGColorSpaceCreateDeviceRGB.argtypes = []
 
-quartz.CGFontCreateWithFontName.restype = c_void_p
-quartz.CGFontCreateWithFontName.argtypes = [c_void_p]
+quartz.CGColorSpaceCreateWithName.restype = c_void_p
+quartz.CGColorSpaceCreateWithName.argtypes = [c_void_p]
+
+quartz.CGContextAddEllipseInRect.argtypes = [c_void_p, CGRect]
+quartz.CGContextAddPath.argtypes = [c_void_p, c_void_p]
 
 quartz.CGContextDrawImage.restype = None
 quartz.CGContextDrawImage.argtypes = [c_void_p, CGRect, c_void_p]
 
-quartz.CGContextRelease.restype = None
-quartz.CGContextRelease.argtypes = [c_void_p]
+quartz.CGContextSetLineWidth.argtypes = [c_void_p, CFFloat]
 
-quartz.CGContextSetTextPosition.restype = None
-quartz.CGContextSetTextPosition.argtypes = [c_void_p, CGFloat, CGFloat]
+quartz.CGContextSetRGBFillColor.argtypes = [c_void_p, CFFloat, CFFloat, CFFloat, CFFloat]
 
-quartz.CGContextSetShouldAntialias.restype = None
-quartz.CGContextSetShouldAntialias.argtypes = [c_void_p, c_bool]
+quartz.CGContextSetRGBStrokeColor.argtypes = [c_void_p, CFFloat, CFFloat, CFFloat, CFFloat]
 
-#these are needed because argtypes are not all voids
-quartz.CGImageDestinationCreateWithURL.argtypes=[c_void_p,c_void_p,c_int,c_void_p]
-quartz.CGContextSetRGBFillColor.argtypes=[c_void_p, CFFloat, CFFloat, CFFloat, CFFloat]
-quartz.CGContextSetRGBStrokeColor.argtypes=[c_void_p, CFFloat, CFFloat, CFFloat, CFFloat]
-quartz.CGColorSpaceCreateWithName.argtypes=[c_void_p]
-quartz.CFURLCreateFromFileSystemRepresentation.argtypes=[c_void_p,c_char_p,c_size_t,c_bool]
+quartz.CGDataProviderCreateWithFilename.restype = c_void_p
+quartz.CGDataProviderCreateWithFilename.argtypes = [c_char_p]  # Double check
 
-####################
-# Exports
+quartz.CGImageCreateWithJPEGDataProvider.restype = c_void_p
+quartz.CGImageCreateWithJPEGDataProvider.argtypes = [c_void_p, CFFloat, c_bool, CGColorRenderingIntent]  # Double check
 
-############
-# Constants
+quartz.CGImageCreateWithPNGDataProvider.restype = c_void_p
+quartz.CGImageCreateWithPNGDataProvider.argtypes = [c_void_p, CFFloat, c_bool, CGColorRenderingIntent]  # Double check
 
-kCGColorSpaceSRGB=ObjCInstance(c_void_p.in_dll(quartz,'kCGColorSpaceSRGB'))
-kCGImageAlphaPremultipliedLast=1
-kCGPathFillStroke=3
-kCGRenderingIntentDefault=0
+quartz.CGImageDestinationAddImage.argtypes = [c_void_p, c_void_p, c_void_p]  # Double check
+
+quartz.CGImageDestinationFinalize.restype = c_bool
+quartz.CGImageDestinationFinalize.argtypes = [c_void_p]
+
+quartz.CGImageGetHeight.restype = c_size_t
+quartz.CGImageGetHeight.argtypes = [c_void_p]
+
+quartz.CGImageGetWidth.restype = c_size_t
+quartz.CGImageGetWidth.argtypes = [c_void_p]
+
+quartz.CGPathAddLineToPoint.argtypes = [c_void_p, c_void_p, CFFloat, CFFloat]
+
+quartz.CGPathCreateMutable.restype = c_void_p
+
+quartz.CGPathMoveToPoint.argtypes = [c_void_p, c_void_p, CFFloat, CFFloat]
 
 CFURLCreateFromFileSystemRepresentation = quartz.CFURLCreateFromFileSystemRepresentation
 CGBitmapContextCreate = quartz.CGBitmapContextCreate
@@ -155,37 +115,22 @@ CGColorSpaceCreateDeviceRGB = quartz.CGColorSpaceCreateDeviceRGB
 CGColorSpaceCreateWithName = quartz.CGColorSpaceCreateWithName
 CGContextAddEllipseInRect = quartz.CGContextAddEllipseInRect
 CGContextAddPath = quartz.CGContextAddPath
-CGContextAddRect = quartz.CGContextAddRect
 CGContextDrawImage = quartz.CGContextDrawImage
-CGContextDrawPath = quartz.CGContextDrawPath
 CGContextSetLineWidth = quartz.CGContextSetLineWidth
-
-#void CGContextSetRGBFillColor(CGContextRef c, CGFloat red, CGFloat green, CGFloat blue, CGFloat alpha);
 CGContextSetRGBFillColor = quartz.CGContextSetRGBFillColor
-CGContextSetRGBFillColor.argtypes=[c_void_p, CGFloat, CGFloat, CGFloat, CGFloat]
 CGContextSetRGBStrokeColor = quartz.CGContextSetRGBStrokeColor
-CGContextSetRGBStrokeColor.argtypes=[c_void_p, CGFloat, CGFloat, CGFloat, CGFloat]
-
 CGDataProviderCreateWithFilename = quartz.CGDataProviderCreateWithFilename
 CGImageCreateWithJPEGDataProvider = quartz.CGImageCreateWithJPEGDataProvider
 CGImageCreateWithPNGDataProvider = quartz.CGImageCreateWithPNGDataProvider
 CGImageDestinationAddImage = quartz.CGImageDestinationAddImage
-#CGImageDestinationCreateWithURL = quartz.CGImageDestinationCreateWithURL
 CGImageDestinationFinalize = quartz.CGImageDestinationFinalize
 CGImageGetHeight = quartz.CGImageGetHeight
 CGImageGetWidth = quartz.CGImageGetWidth
-
-
-#void CGPathAddLineToPoint(CGMutablePathRef path, const CGAffineTransform *m, CGFloat x, CGFloat y);
 CGPathAddLineToPoint = quartz.CGPathAddLineToPoint
-CGPathAddLineToPoint.argtypes=[c_void_p, c_void_p, CGFloat, CGFloat]
 CGPathCreateMutable = quartz.CGPathCreateMutable
-
-#void CGPathMoveToPoint(CGMutablePathRef path, const CGAffineTransform *m, CGFloat x, CGFloat y);
 CGPathMoveToPoint = quartz.CGPathMoveToPoint
-CGPathMoveToPoint.argtypes=[c_void_p, c_void_p, CGFloat, CGFloat]
-#CGRectMake = quartz.CGRectMake
 
-def CGImageDestinationCreateWithURL(a,b,c,d):
-	#arg 2 needs to be nsstring
-	quartz.CGImageDestinationCreateWithURL(a,ns(b),c,d)
+
+def CGImageDestinationCreateWithURL(a, b, c, d):
+    # arg 2 needs to be nsstring
+    quartz.CGImageDestinationCreateWithURL(a, ns(b), c, d)
