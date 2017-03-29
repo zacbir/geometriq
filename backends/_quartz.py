@@ -14,22 +14,22 @@ CGBitmapInfo = c_uint32  # CGImage.h
 CGPathDrawingMode = c_int32  # CGContext.h
 CGColorRenderingIntent = c_int32  # CGColorSpace.h
 
-class CGPointS(Structure):
+class CGPoint(Structure):
     _fields_ = [
         ('x', CGFloat),
         ('y', CGFloat)
     ]
 
-class CGSizeS(Structure):
+class CGSize(Structure):
     _fields_ = [
         ('width', CGFloat),
         ('height', CGFloat)
     ]
 
-class CGRectS(Structure):
+class CGRect(Structure):
     _fields_ = [
-        ('origin', CGPointS),
-        ('size', CGSizeS)
+        ('origin', CGPoint),
+        ('size', CGSize)
     ]
 
 ##############
@@ -58,13 +58,13 @@ quartz.CGColorSpaceCreateDeviceRGB.argtypes = []
 quartz.CGColorSpaceCreateWithName.restype = c_void_p
 quartz.CGColorSpaceCreateWithName.argtypes = [c_void_p]
 
-quartz.CGContextAddEllipseInRect.argtypes = [c_void_p, CGRectS]  # Double check
+quartz.CGContextAddEllipseInRect.argtypes = [c_void_p, CGRect]  # Double check
 
 quartz.CGContextAddPath.argtypes = [c_void_p, c_void_p]
 
-quartz.CGContextAddRect.argtypes = [c_void_p, CGRectS]  # Double check
+quartz.CGContextAddRect.argtypes = [c_void_p, CGRect]  # Double check
 
-quartz.CGContextDrawImage.argtypes = [c_void_p, CGRectS, c_void_p]  # Double check
+quartz.CGContextDrawImage.argtypes = [c_void_p, CGRect, c_void_p]  # Double check
 
 quartz.CGContextDrawPath.argtypes = [c_void_p, CGPathDrawingMode]
 
