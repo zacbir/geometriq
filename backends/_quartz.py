@@ -25,7 +25,7 @@ kCGRenderingIntentDefault = 0
 quartz.CFURLCreateFromFileSystemRepresentation.argtypes = [c_void_p, c_char_p, c_size_t, c_bool]
 
 quartz.CGBitmapContextCreate.restype = c_void_p
-quartz.CGBitmapContextCreate.argtypes = [c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, c_size_t]  #
+quartz.CGBitmapContextCreate.argtypes = [c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, c_int32]  # Double check
 
 quartz.CGImageSourceCreateImageAtIndex.restype = c_void_p
 quartz.CGImageSourceCreateImageAtIndex.argtypes = [c_void_p, c_size_t, c_void_p]
@@ -36,16 +36,15 @@ quartz.CGColorSpaceCreateDeviceRGB.argtypes = []
 quartz.CGColorSpaceCreateWithName.restype = c_void_p
 quartz.CGColorSpaceCreateWithName.argtypes = [c_void_p]
 
-quartz.CGContextAddEllipseInRect.argtypes = [c_void_p, CGRect]
+quartz.CGContextAddEllipseInRect.argtypes = [c_void_p, CGRect]  # Double check
 
 quartz.CGContextAddPath.argtypes = [c_void_p, c_void_p]
 
-quartz.CGContextAddRect.argtypes = [c_void_p, CGRect]
+quartz.CGContextAddRect.argtypes = [c_void_p, CGRect]  # Double check
 
-quartz.CGContextDrawImage.restype = None
-quartz.CGContextDrawImage.argtypes = [c_void_p, CGRect, c_void_p]
+quartz.CGContextDrawImage.argtypes = [c_void_p, CGRect, c_void_p]  # Double check
 
-quartz.CGContextDrawPath.argtypes = [c_void_p, c_size_t]
+quartz.CGContextDrawPath.argtypes = [c_void_p, c_int32]
 
 quartz.CGContextSetLineWidth.argtypes = [c_void_p, CFFloat]
 
@@ -57,10 +56,10 @@ quartz.CGDataProviderCreateWithFilename.restype = c_void_p
 quartz.CGDataProviderCreateWithFilename.argtypes = [c_char_p]  # Double check
 
 quartz.CGImageCreateWithJPEGDataProvider.restype = c_void_p
-quartz.CGImageCreateWithJPEGDataProvider.argtypes = [c_void_p, CFFloat, c_bool, c_size_t]  # Double check
+quartz.CGImageCreateWithJPEGDataProvider.argtypes = [c_void_p, CFFloat, c_bool, c_int32]  # Double check
 
 quartz.CGImageCreateWithPNGDataProvider.restype = c_void_p
-quartz.CGImageCreateWithPNGDataProvider.argtypes = [c_void_p, CFFloat, c_bool, c_size_t]  # Double check
+quartz.CGImageCreateWithPNGDataProvider.argtypes = [c_void_p, CFFloat, c_bool, c_int32]  # Double check
 
 quartz.CGImageDestinationAddImage.argtypes = [c_void_p, c_void_p, c_void_p]  # Double check
 
