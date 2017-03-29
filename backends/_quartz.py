@@ -47,7 +47,7 @@ kCGRenderingIntentDefault = 0
 quartz.CFURLCreateFromFileSystemRepresentation.argtypes = [c_void_p, c_char_p, c_size_t, c_bool]
 
 quartz.CGBitmapContextCreate.restype = c_void_p
-quartz.CGBitmapContextCreate.argtypes = [c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, CGBitmapInfo]  # Double check
+quartz.CGBitmapContextCreate.argtypes = [c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, CGBitmapInfo]
 
 quartz.CGImageSourceCreateImageAtIndex.restype = c_void_p
 quartz.CGImageSourceCreateImageAtIndex.argtypes = [c_void_p, c_size_t, c_void_p]
@@ -75,15 +75,15 @@ quartz.CGContextSetRGBFillColor.argtypes = [c_void_p, CGFloat, CGFloat, CGFloat,
 quartz.CGContextSetRGBStrokeColor.argtypes = [c_void_p, CGFloat, CGFloat, CGFloat, CGFloat]
 
 quartz.CGDataProviderCreateWithFilename.restype = c_void_p
-quartz.CGDataProviderCreateWithFilename.argtypes = [c_char_p]  # Double check
+quartz.CGDataProviderCreateWithFilename.argtypes = [c_char_p]
 
 quartz.CGImageCreateWithJPEGDataProvider.restype = c_void_p
-quartz.CGImageCreateWithJPEGDataProvider.argtypes = [c_void_p, CGFloat, c_bool, CGColorRenderingIntent]  # Double check
+quartz.CGImageCreateWithJPEGDataProvider.argtypes = [c_void_p, CGFloat, c_bool, CGColorRenderingIntent]
 
 quartz.CGImageCreateWithPNGDataProvider.restype = c_void_p
-quartz.CGImageCreateWithPNGDataProvider.argtypes = [c_void_p, CGFloat, c_bool, CGColorRenderingIntent]  # Double check
+quartz.CGImageCreateWithPNGDataProvider.argtypes = [c_void_p, CGFloat, c_bool, CGColorRenderingIntent]
 
-quartz.CGImageDestinationAddImage.argtypes = [c_void_p, c_void_p, c_void_p]  # Double check
+quartz.CGImageDestinationAddImage.argtypes = [c_void_p, c_void_p, c_void_p]
 
 quartz.CGImageDestinationFinalize.restype = c_bool
 quartz.CGImageDestinationFinalize.argtypes = [c_void_p]
