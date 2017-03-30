@@ -49,8 +49,8 @@ quartz.CFURLCreateFromFileSystemRepresentation.argtypes = [c_void_p, c_char_p, c
 quartz.CGBitmapContextCreate.restype = c_void_p
 quartz.CGBitmapContextCreate.argtypes = [c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, CGBitmapInfo]
 
-quartz.CGImageSourceCreateImageAtIndex.restype = c_void_p
-quartz.CGImageSourceCreateImageAtIndex.argtypes = [c_void_p, c_size_t, c_void_p]
+quartz.CGBitmapContextCreateImage.restype = c_void_p
+quartz.CGBitmapContextCreateImage.argtypes = [c_void_p]
 
 quartz.CGColorSpaceCreateDeviceRGB.restype = c_void_p
 quartz.CGColorSpaceCreateDeviceRGB.argtypes = []
@@ -127,4 +127,4 @@ CGPathMoveToPoint = quartz.CGPathMoveToPoint
 
 def CGImageDestinationCreateWithURL(a, b, c, d):
     # arg 2 needs to be nsstring
-    quartz.CGImageDestinationCreateWithURL(a, ns(b), c, d)
+    return quartz.CGImageDestinationCreateWithURL(a, ns(b), c, d)
