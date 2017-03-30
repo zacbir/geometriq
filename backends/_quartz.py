@@ -44,6 +44,7 @@ kCGRenderingIntentDefault = 0
 ##############
 # Functions
 
+quartz.CFURLCreateFromFileSystemRepresentation.restype = c_void_p
 quartz.CFURLCreateFromFileSystemRepresentation.argtypes = [c_void_p, c_char_p, c_size_t, c_bool]
 
 quartz.CGBitmapContextCreate.restype = c_void_p
@@ -101,8 +102,6 @@ quartz.CGPathCreateMutable.restype = c_void_p
 quartz.CGPathMoveToPoint.argtypes = [c_void_p, c_void_p, CGFloat, CGFloat]
 
 CFURLCreateFromFileSystemRepresentation = quartz.CFURLCreateFromFileSystemRepresentation
-CGBitmapContextCreate = quartz.CGBitmapContextCreate
-CGBitmapContextCreateImage = quartz.CGBitmapContextCreateImage
 CGColorSpaceCreateDeviceRGB = quartz.CGColorSpaceCreateDeviceRGB
 CGColorSpaceCreateWithName = quartz.CGColorSpaceCreateWithName
 CGContextAddEllipseInRect = quartz.CGContextAddEllipseInRect
@@ -128,3 +127,11 @@ CGPathMoveToPoint = quartz.CGPathMoveToPoint
 def CGImageDestinationCreateWithURL(a, b, c, d):
     # arg 2 needs to be nsstring
     return quartz.CGImageDestinationCreateWithURL(a, ns(b), c, d)
+
+
+def CGBitmapContextCreate(a, b, c, d, e, f, g):
+    return ObjCInstance(quartz.CGBitmapContextCreate(a, b, c, d, e, f, g))
+
+
+def CGBitmapContextCreateImage(a):
+    return ObjCInstance(quartz.CGBitmapContextCreateImage)
