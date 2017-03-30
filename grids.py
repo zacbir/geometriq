@@ -31,7 +31,7 @@ class Grid(object):
 
     def closest_point_to(self, other_point):
         distance, point = min([(x.distance_to(other_point), x) for x in self.points])
-        return point
+        return point if distance < 0.05 * self.size else other_point
 
 
 class SquareGrid(Grid):
