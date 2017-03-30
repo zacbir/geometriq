@@ -127,4 +127,4 @@ CGPathMoveToPoint = quartz.CGPathMoveToPoint
 
 def CGImageDestinationCreateWithURL(a, b, c, d):
     # arg 2 needs to be nsstring
-    quartz.CGImageDestinationCreateWithURL(a, ns(b), c, d)
+    return quartz.CGImageDestinationCreateWithURL(a, ns(b), c, d)
