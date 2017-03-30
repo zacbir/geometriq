@@ -65,8 +65,8 @@ class SquareGrid(Grid):
     def _generate_points(self):
         points = set()
 
-        for y in xrange(self.iterations_tall):
-            for x in xrange(self.iterations_wide):
+        for y in range(self.iterations_tall):
+            for x in range(self.iterations_wide):
 
                 p_x = x * self.size
                 p_y = y * self.size
@@ -88,8 +88,8 @@ class DiamondGrid(Grid):
     def _generate_points(self):
         points = set()
 
-        for y in xrange(self.iterations_tall):
-            for x in xrange(self.iterations_wide):
+        for y in range(self.iterations_tall):
+            for x in range(self.iterations_wide):
 
                 p_x = x * self.step
                 y_offset = 0 if x % 2 == 0 else self.step
@@ -118,8 +118,8 @@ class HorizontalHexagonGrid(Grid):
     def _generate_points(self):
         points = set()
 
-        for y in xrange(self.iterations_tall):
-            for x in xrange(self.iterations_wide):
+        for y in range(self.iterations_tall):
+            for x in range(self.iterations_wide):
 
                 p_x = x * (self.size / 2)
                 p_y = y * self.step
@@ -147,8 +147,8 @@ class VerticalHexagonGrid(Grid):
     def _generate_points(self):
         points = set()
 
-        for y in xrange(self.iterations_tall):
-            for x in xrange(self.iterations_wide):
+        for y in range(self.iterations_tall):
+            for x in range(self.iterations_wide):
 
                 p_x = x * self.step
                 p_y = y * (self.size / 2)

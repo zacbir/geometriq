@@ -26,7 +26,7 @@ class ReferenceImage(object):
         self.bytes_per_pixel = 4
         self.bytes_per_row = self.bytes_per_pixel * self.width
         bits_per_component = 8
-        self.raw_data = array('B', (0 for i in xrange(self.width * self.height * self.bytes_per_pixel)))
+        self.raw_data = array('B', (0 for i in range(self.width * self.height * self.bytes_per_pixel)))
         context = CGBitmapContextCreate(self.raw_data, self.width, self.height, bits_per_component, self.bytes_per_row,
                                         color_space, kCGImageAlphaPremultipliedLast)
         CGContextDrawImage(context, CGRectMake(0, 0, self.width, self.height), self.image)
@@ -55,7 +55,7 @@ class ReferenceImage(object):
     def image_matrix(self):
         pixels = []
         rows = []
-        for i in xrange(len(self.raw_data) / self.bytes_per_pixel):
+        for i in range(len(self.raw_data) / self.bytes_per_pixel):
             idx = i * self.bytes_per_pixel
             r = self.raw_data[idx]
             g = self.raw_data[idx + 1]
@@ -63,7 +63,7 @@ class ReferenceImage(object):
             a = self.raw_data[idx + 3]
             pixels.append(Color.from_full_value(r, g, b, a))
 
-            for j in xrange(len(pixels) / self.width):
+            for j in range(len(pixels) / self.width):
                 idx = j * self.width
                 rows.append(pixels[idx:idx + self.width])
 

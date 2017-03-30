@@ -67,7 +67,7 @@ class Shape(object):
     def paths(self):
         paths = []
 
-        for i in xrange(len(self.points)):
+        for i in range(len(self.points)):
             p1 = self.points[i]
             idx_next = i + 1 if i + 1 < len(self.points) else 0
             p2 = self.points[idx_next]
