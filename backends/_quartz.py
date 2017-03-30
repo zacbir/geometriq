@@ -86,6 +86,9 @@ quartz.CGImageCreateWithPNGDataProvider.argtypes = [c_void_p, CGFloat, c_bool, C
 
 quartz.CGImageDestinationAddImage.argtypes = [c_void_p, c_void_p, c_void_p]
 
+quartz.CGImageDestinationCreateWithURL.restype = [c_void_p]
+quartz.CGImageDestinationCreateWithURL.argtypes = [c_void_p, c_char_p, c_size_t, c_void_p]
+
 quartz.CGImageDestinationFinalize.restype = c_bool
 quartz.CGImageDestinationFinalize.argtypes = [c_void_p]
 
@@ -134,4 +137,4 @@ def CGBitmapContextCreate(a, b, c, d, e, f, g):
 
 
 def CGBitmapContextCreateImage(a):
-    return ObjCInstance(quartz.CGBitmapContextCreateImage)
+    return ObjCInstance(quartz.CGBitmapContextCreateImage(a))
