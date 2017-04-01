@@ -22,9 +22,19 @@ class BaseCanvas(object):
         self.stroke_width = None
         self.stroke_color = None
         self.fill_color = None
+        self.translation_point = None
+        self.rotation = 0
 
     def center(self):
         return Point(self.width / 2, self.height / 2)
+
+    def translate_and_rotate_transform(self, translation_point, rotation):
+        self.translation_point = translation_point
+        self.rotation = rotation
+
+    def reset_transform(self):
+        self.translation_point = Point(-self.translation_point.x, -self.translation_point.y)
+        self.rotation = 0
 
     def set_stroke_width(self, stroke_width):
         self.stroke_width = stroke_width
@@ -54,6 +64,12 @@ class BaseCanvas(object):
         pass
 
     def draw_circle(self, center, radius):
+        pass
+
+    def draw_quarter_circle(self, center, first_point):
+        pass
+
+    def draw_half_circle(self, center, first_point):
         pass
 
     def save(self):
