@@ -69,11 +69,15 @@ quartz.CGContextDrawImage.argtypes = [c_void_p, CGRect, c_void_p]  # Double chec
 
 quartz.CGContextDrawPath.argtypes = [c_void_p, CGPathDrawingMode]
 
+quartz.CGContextRotateCTM.argtypes = [c_void_p, CGFloat]
+
 quartz.CGContextSetLineWidth.argtypes = [c_void_p, CGFloat]
 
 quartz.CGContextSetRGBFillColor.argtypes = [c_void_p, CGFloat, CGFloat, CGFloat, CGFloat]
 
 quartz.CGContextSetRGBStrokeColor.argtypes = [c_void_p, CGFloat, CGFloat, CGFloat, CGFloat]
+
+quartz.CGContextTranslateCTM.argtypes = [c_void_p, CGFloat, CGFloat]
 
 quartz.CGDataProviderCreateWithFilename.restype = c_void_p
 quartz.CGDataProviderCreateWithFilename.argtypes = [c_char_p]
@@ -98,6 +102,8 @@ quartz.CGImageGetHeight.argtypes = [c_void_p]
 quartz.CGImageGetWidth.restype = c_size_t
 quartz.CGImageGetWidth.argtypes = [c_void_p]
 
+quartz.CGPathAddCurveToPoint.argtypes = [c_void_p, c_void_p, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat]
+
 quartz.CGPathAddLineToPoint.argtypes = [c_void_p, c_void_p, CGFloat, CGFloat]
 
 quartz.CGPathCreateMutable.restype = c_void_p
@@ -112,9 +118,11 @@ CGContextAddPath = quartz.CGContextAddPath
 CGContextAddRect = quartz.CGContextAddRect
 CGContextDrawImage = quartz.CGContextDrawImage
 CGContextDrawPath = quartz.CGContextDrawPath
+CGContextRotateCTM = quartz.CGContextRotateCTM
 CGContextSetLineWidth = quartz.CGContextSetLineWidth
 CGContextSetRGBFillColor = quartz.CGContextSetRGBFillColor
 CGContextSetRGBStrokeColor = quartz.CGContextSetRGBStrokeColor
+CGContextTranslateCTM = quartz.CGContextTranslateCTM
 CGDataProviderCreateWithFilename = quartz.CGDataProviderCreateWithFilename
 CGImageCreateWithJPEGDataProvider = quartz.CGImageCreateWithJPEGDataProvider
 CGImageCreateWithPNGDataProvider = quartz.CGImageCreateWithPNGDataProvider
@@ -122,6 +130,7 @@ CGImageDestinationAddImage = quartz.CGImageDestinationAddImage
 CGImageDestinationFinalize = quartz.CGImageDestinationFinalize
 CGImageGetHeight = quartz.CGImageGetHeight
 CGImageGetWidth = quartz.CGImageGetWidth
+CGPathAddCurveToPoint = quartz.CGPathAddCurveToPoint
 CGPathAddLineToPoint = quartz.CGPathAddLineToPoint
 CGPathCreateMutable = quartz.CGPathCreateMutable
 CGPathMoveToPoint = quartz.CGPathMoveToPoint
