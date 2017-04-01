@@ -39,3 +39,5 @@ class Color(object):
     def __repr__(self):
         return '<Color r:{} g:{} b:{} a:{}>'.format(*self.rgba())
 
+
+clear = Color(0, 0, 0, 0)
