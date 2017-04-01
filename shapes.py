@@ -1,4 +1,4 @@
-from math import sqrt
+from math import sqrt, cos, sin, radians
 
 """
 Simple geometric shape models.
@@ -45,6 +45,9 @@ class Point(object):
         return hash(self.__key())
 
 
+origin = Point(0, 0)
+
+
 class Shape(object):
 
     """ A generic model for a regular polygon. Has a center Point(), and a
@@ -80,91 +83,77 @@ class Shape(object):
             point = self.grid.closest_point_to(point)
         self.points.append(point)
 
-    def draw(self, canvas):
+    def draw(self, canvas, rotation=0, translation_point=None):
+        canvas.translate_and_rotate_transform(translation_point, rotation)
         canvas.polygon(self.points)
+        canvas.reset_transform()
 
 
 class QuarterCircle(Shape):
 
-    def __init__(self, center, size):
+    def __init__(self, center, size, angle):
         super(QuarterCircle, self).__init__(center, size)
 
-        self.offset = (4.0 * size * (sqrt(2) - 1)) / 3.0
+        self.angle = angle
+        self.first_point = Point(size * cos(radians(self.angle)),
+                                 size * sin(radians(self.angle)))
+
+    def draw(self, canvas):
+        canvas.draw_quarter_circle(self.center, self.first_point)
 
 
 class NorthwestQuarterCircle(QuarterCircle):
-    pass
+
+    def __init__(self, center, size):
+        super(NorthwestQuarterCircle, self).__init__(center, size, 180)
 
 
 class NortheastQuarterCircle(QuarterCircle):
-    pass
+
+    def __init__(self, center, size):
+        super(NortheastQuarterCircle, self).__init__(center, size, 90)
 
 
 class SoutheastQuarterCircle(QuarterCircle):
-    pass
+
+    def __init__(self, center, size):
+        super(SoutheastQuarterCircle, self).__init__(center, size, 0)
 
 
 class SouthwestQuarterCircle(QuarterCircle):
-    pass
+
+    def __init__(self, center, size):
+        super(SouthwestQuarterCircle, self).__init__(center, size, 270)
 
 
 class HalfCircle(QuarterCircle):
-    """
 
-    for i in xrange(blits):
-        for j in xrange(blits - 1):
-            if i % 2 == 0:
-                p1 = Point(x + ((i + 1) * step), y + (j * step))
-                p2 = Point(x + (i * step), y + (j * step) + step)
-                p3 = Point(x + ((i + 1) * step), y + (j * step) + 2 * step)
-                pointsmap = {p1 : {'point': p2,
-                                   'cp1': Point(p1.x - offset, p1.y),
-                                   'cp2': Point(p2.x, p2.y - offset)},
-                             p2 : {'point': p3,
-                                   'cp1': Point(p2.x, p2.y + offset),
-                                   'cp2': Point(p3.x - offset, p3.y)}}
-            else:
-                p1 = Point(x + (i * step), y + (j * step))
-                p2 = Point(x + (i * step) + step, y + (j * step) + step)
-                p3 = Point(x + (i * step), y + (j * step) + 2 * step)
-                pointsmap = {p1 : {'point': p2,
-                                   'cp1': Point(p1.x + offset, p1.y),
-                                   'cp2': Point(p2.x, p2.y - offset)},
-                             p2 : {'point': p3,
-                                   'cp1': Point(p2.x, p2.y + offset),
-                                   'cp2': Point(p3.x + offset, p3.y)}}
-
-            path = CGPathCreateMutable()
-            CGContextSetRGBFillColor(ctx, 0.95, 0.85, 0.55, random.random() * 1.0)
-            CGPathMoveToPoint(path, None, p1.x, p1.y)
-            cp1 = pointsmap[p1]['cp1']
-            cp2 = pointsmap[p1]['cp2']
-            CGPathAddCurveToPoint(path, None, cp1.x, cp1.y, cp2.x, cp2.y, p2.x, p2.y)
-            cp1 = pointsmap[p2]['cp1']
-            cp2 = pointsmap[p2]['cp2']
-            CGPathAddCurveToPoint(path, None, cp1.x, cp1.y, cp2.x, cp2.y, p3.x, p3.y)
-            CGPathAddLineToPoint(path, None, p1.x, p1.y)
-            CGContextAddPath(ctx, path)
-            CGContextDrawPath(ctx, kCGPathFill)
-
-    """
-    pass
+    def draw(self, canvas):
+        canvas.draw_half_circle(self.center, self.first_point)
 
 
 class NorthHalfCircle(HalfCircle):
-    pass
+
+    def __init__(self, center, size):
+        super(NorthHalfCircle, self).__init__(center, size, 180)
 
 
 class EastHalfCircle(HalfCircle):
-    pass
+
+    def __init__(self, center, size):
+        super(EastHalfCircle, self).__init__(center, size, 90)
 
 
 class SouthHalfCircle(HalfCircle):
-    pass
+
+    def __init__(self, center, size):
+        super(SouthHalfCircle, self).__init__(center, size, 0)
 
 
 class WestHalfCircle(HalfCircle):
-    pass
+
+    def __init__(self, center, size):
+        super(WestHalfCircle, self).__init__(center, size, 270)
 
 
 class Circle(Shape):
