@@ -3,6 +3,36 @@ from datetime import datetime
 from .quartz import *
 from .base_canvas import BaseCanvas
 
+from ..shapes import origin
+
+
+class ContextTranslator:
+
+    def __init__(self, context, translation_point):
+        self.context = context
+        self.translation_point = translation_point
+
+    def __enter__(self):
+        CGContextTranslateCTM(self.context, self.translation_point.x, self.translation_point.y)
+        return self.context
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        CGContextTranslateCTM(self.context, -self.translation_point.x, -self.translation_point.y)
+
+
+class ContextRotator:
+
+    def __init__(self, context, rotation):
+        self.context = context
+        self.rotation = rotation
+
+    def __enter__(self):
+        CGContextRotateCTM(self.context, self.rotation)
+        return self.context
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        CGContextRotateCTM(self.context, -self.rotation)
+
 
 class CoreGraphicsCanvas(BaseCanvas):
     def __init__(self, name, width, height):
@@ -11,18 +41,6 @@ class CoreGraphicsCanvas(BaseCanvas):
         self.colorSpace = CGColorSpaceCreateDeviceRGB()
         self.context = CGBitmapContextCreate(None, width, height, 8, width * 4, self.colorSpace, kCGImageAlphaPremultipliedLast)
         self.path = None
-
-    def translate_and_rotate_transform(self, translation_point, rotation):
-        super(CoreGraphicsCanvas, self).translate_and_rotate_transform(translation_point, rotation)
-
-        CGContextTranslateCTM(self.context, self.translation_point.x, self.translation_point.y)
-        CGContextRotateCTM(self.context, self.rotation)
-
-    def reset_transform(self):
-        super(CoreGraphicsCanvas, self).reset_transform()
-
-        CGContextRotateCTM(self.context, self.rotation)
-        CGContextTranslateCTM(self.context, self.translation_point.x, self.translation_point.y)
 
     def set_stroke_width(self, stroke_width):
         self.stroke_width = stroke_width
@@ -41,34 +59,37 @@ class CoreGraphicsCanvas(BaseCanvas):
         CGContextAddRect(self.context, r)
         CGContextDrawPath(self.context, kCGPathFillStroke)
 
-    def begin_path(self):
-        self.path = CGPathCreateMutable()
+    def draw_line(self, from_point, to_point, at_point=origin, rotation=0):
+        with ContextTranslator(self.context, at_point) as t_context:
+            with ContextRotator(t_context, rotation) as r_t_context:
+                path = CGPathCreateMutable()
+                CGPathMoveToPoint(path, None, from_point.x, from_point.y)
+                CGPathAddLineToPoint(path, None, to_point.x, to_point.y)
+                CGContextAddPath(r_t_context, path)
+                CGContextDrawPath(r_t_context, kCGPathFillStroke)
 
-    def end_path(self):
-        CGContextAddPath(self.context, self.path)
-        CGContextDrawPath(self.context, kCGPathFillStroke)
+    def draw_polygon(self, points, at_point=origin, rotation=0):
+        with ContextTranslator(self.context, at_point) as t_context:
+            with ContextRotator(t_context, rotation) as r_t_context:
+                path = CGPathCreateMutable()
+                starting_point = points.pop(0)
+                CGPathMoveToPoint(path, None, starting_point.x, starting_point.y)
+                for next_point in points:
+                    CGPathAddLineToPoint(path, None, next_point.x, next_point.y)
+                CGPathAddLineToPoint(path, None, starting_point.x, starting_point.y)
+                CGContextAddPath(r_t_context, path)
+                CGContextDrawPath(r_t_context, kCGPathFillStroke)
 
-    def move_to(self, point):
-        CGPathMoveToPoint(self.path, None, point.x, point.y)
+    def draw_circle(self, radius, at_point=origin, rotation=0):
+        with ContextTranslator(self.context, at_point) as t_context:
+            with ContextRotator(t_context, rotation) as r_t_context:
+                path = CGPathCreateMutable()
+                CGContextAddEllipseInRect(r_t_context,
+                                          CGRect((origin.x - radius, origin.y - radius), (radius * 2, radius * 2)))
+                CGContextAddPath(r_t_context, path)
+                CGContextDrawPath(r_t_context, kCGPathFillStroke)
 
-    def draw_line_to(self, point):
-        CGPathAddLineToPoint(self.path, None, point.x, point.y)
-
-    def polygon(self, points):
-        self.begin_path()
-        self.move_to(points[0])
-        for point in points[1:]:
-            self.draw_line_to(point)
-        self.draw_line_to(points[0])
-        self.end_path()
-
-    def draw_circle(self, center, radius):
-        self.begin_path()
-        CGContextAddEllipseInRect(self.context,
-                                  CGRect((center.x - radius, center.y - radius), (radius * 2, radius * 2)))
-        self.end_path()
-
-    def draw_quarter_circle(self, center, first_point):
+    def draw_quarter_circle(self, radius, at_point=origin, rotation=0):
         """
 
         for i in xrange(blits):
@@ -108,14 +129,22 @@ class CoreGraphicsCanvas(BaseCanvas):
                 CGContextDrawPath(ctx, kCGPathFill)
 
         """
-        offset = (4 * radius * (sqrt(2) - 1)) / 3
+        with ContextTranslator(self.context, at_point) as t_context:
+            with ContextRotator(t_context, rotation) as r_t_context:
+                offset = (4 * radius * (sqrt(2) - 1)) / 3
 
-        self.begin_path()
-        self.end_path()
+                path = CGPathCreateMutable()
+                # Heavy lifting
+                CGContextAddPath(r_t_context, path)
+                CGContextDrawPath(r_t_context, kCGPathFillStroke)
 
-    def draw_half_circle(self, center, first_point):
-        self.begin_path()
-        self.end_path()
+    def draw_half_circle(self, radius, at_point=origin, rotation=0):
+        with ContextTranslator(self.context, at_point) as t_context:
+            with ContextRotator(t_context, rotation) as r_t_context:
+                path = CGPathCreateMutable()
+                # Heavy lifting
+                CGContextAddPath(r_t_context, path)
+                CGContextDrawPath(r_t_context, kCGPathFillStroke)
 
     def save(self):
         image = CGBitmapContextCreateImage(self.context)
