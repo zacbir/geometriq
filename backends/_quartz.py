@@ -65,6 +65,9 @@ quartz.CGContextAddPath.argtypes = [c_void_p, c_void_p]
 
 quartz.CGContextAddRect.argtypes = [c_void_p, CGRect]  # Double check
 
+quartz.CGContextConvertPointToDeviceSpace.restype = CGPoint
+quartz.CGContextConvertPointToDeviceSpace.argtypes = [c_void_p, CGPoint]
+
 quartz.CGContextDrawImage.argtypes = [c_void_p, CGRect, c_void_p]  # Double check
 
 quartz.CGContextDrawPath.argtypes = [c_void_p, CGPathDrawingMode]
@@ -116,6 +119,7 @@ CGColorSpaceCreateWithName = quartz.CGColorSpaceCreateWithName
 CGContextAddEllipseInRect = quartz.CGContextAddEllipseInRect
 CGContextAddPath = quartz.CGContextAddPath
 CGContextAddRect = quartz.CGContextAddRect
+CGContextConvertPointToToDeviceSpace = quartz.CGContextConvertPointToDeviceSpace
 CGContextDrawImage = quartz.CGContextDrawImage
 CGContextDrawPath = quartz.CGContextDrawPath
 CGContextRotateCTM = quartz.CGContextRotateCTM
