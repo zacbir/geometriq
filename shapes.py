@@ -129,6 +129,22 @@ class Triangle(Shape):
             Point(x + (self.size / 2), y - self.r))]
 
 
+class HexagonalRhombus(Shape):
+
+    def __init__(self, size, grid=None):
+        super(HexagonalRhombus, self).__init__(size, grid)
+
+        self.step = sqrt(self.size**2 - (self.size / 2)**2)
+
+        x, y, sz = self.center.x, self.center.y, self.size / 2
+
+        [self.add_point(x) for x in (
+            self.center,
+            Point(x - self.step, y + sz),
+            Point(x, y + self.size),
+            Point(x + self.step, y + sz))]
+
+
 class Square(Shape):
 
     def __init__(self, size):

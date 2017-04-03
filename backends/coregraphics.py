@@ -69,12 +69,13 @@ class CoreGraphicsCanvas(BaseCanvas):
                 CGContextDrawPath(r_t_context, kCGPathFillStroke)
 
     def draw_polygon(self, points, at_point=origin, rotation=0):
+        drawn_points = points[:]
         with ContextTranslator(self.context, at_point) as t_context:
             with ContextRotator(t_context, rotation) as r_t_context:
                 path = CGPathCreateMutable()
-                starting_point = points.pop(0)
+                starting_point = drawn_points.pop(0)
                 CGPathMoveToPoint(path, None, starting_point.x, starting_point.y)
-                for next_point in points:
+                for next_point in drawn_points:
                     CGPathAddLineToPoint(path, None, next_point.x, next_point.y)
                 CGPathAddLineToPoint(path, None, starting_point.x, starting_point.y)
                 CGContextAddPath(r_t_context, path)
