@@ -35,7 +35,8 @@ class ContextRotator:
 
 
 class CoreGraphicsCanvas(BaseCanvas):
-    def __init__(self, name, width, height):
+    def __init__(self, name, width, height=None):
+        height = height if height else width
         super(CoreGraphicsCanvas, self).__init__(name, width, height)
 
         self.colorSpace = CGColorSpaceCreateDeviceRGB()
@@ -149,7 +150,7 @@ class CoreGraphicsCanvas(BaseCanvas):
 
     def save(self):
         image = CGBitmapContextCreateImage(self.context)
-        filename = "{}{}.png".format(self.name, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'))
+        filename = "{}_{}.png".format(self.name, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'))
         url = NSURL.fileURLWithPath_(filename)
         dest = CGImageDestinationCreateWithURL(url, 'public.png', 1, None)
         CGImageDestinationAddImage(dest, image, None)

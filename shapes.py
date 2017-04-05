@@ -65,8 +65,8 @@ class Shape(object):
     [<Point x: 2, y: 1>]
     """
 
-    def __init__(self, size, grid=None):
-        self.center = origin
+    def __init__(self, size, center=origin, grid=None):
+        self.center = center
         self.size = size
         self.grid = grid
         self.points = []
@@ -89,8 +89,8 @@ class Shape(object):
 
 class QuarterCircle(Shape):
 
-    def __init__(self, size):
-        super(QuarterCircle, self).__init__(size)
+    def __init__(self, size, center=origin):
+        super(QuarterCircle, self).__init__(size, center)
 
         self.first_point = Point(self.center.x + size, self.center.y)
 
@@ -106,8 +106,8 @@ class HalfCircle(QuarterCircle):
 
 class Circle(Shape):
 
-    def __init__(self, size):
-        super(Circle, self).__init__(size)
+    def __init__(self, size, center=origin):
+        super(Circle, self).__init__(size, center)
 
     def draw(self, canvas, at_point=origin, rotation=0):
         canvas.draw_circle(self.size, at_point, rotation)
@@ -115,8 +115,8 @@ class Circle(Shape):
 
 class Triangle(Shape):
 
-    def __init__(self, size, grid=None):
-        super(Triangle, self).__init__(size, grid)
+    def __init__(self, size, center=origin, grid=None):
+        super(Triangle, self).__init__(size, center, grid)
 
         self.step = sqrt(self.size**2 - (self.size / 2)**2)
         self.r = sqrt(3) * self.size / 6
@@ -131,8 +131,8 @@ class Triangle(Shape):
 
 class HexagonalRhombus(Shape):
 
-    def __init__(self, size, grid=None):
-        super(HexagonalRhombus, self).__init__(size, grid)
+    def __init__(self, size, center=origin, grid=None):
+        super(HexagonalRhombus, self).__init__(size, center, grid)
 
         self.step = sqrt(self.size**2 - (self.size / 2)**2)
 
@@ -147,8 +147,8 @@ class HexagonalRhombus(Shape):
 
 class Square(Shape):
 
-    def __init__(self, size):
-        super(Square, self).__init__(size)
+    def __init__(self, size, center=origin):
+        super(Square, self).__init__(size, center)
 
         x, y, sz = self.center.x, self.center.y, size / 2
 
@@ -161,8 +161,8 @@ class Square(Shape):
 
 class Hexagon(Shape):
 
-    def __init__(self, size, grid=None):
-        super(Hexagon, self).__init__(size, grid)
+    def __init__(self, size, center=origin, grid=None):
+        super(Hexagon, self).__init__(size, center, grid)
 
         self.step = sqrt(self.size**2 - (self.size / 2)**2)
 
