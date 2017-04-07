@@ -42,6 +42,9 @@ class Point(object):
     def __key(self):
         return self.x - 0, self.y - 0
 
+    def __cmp__(self, other):
+        return cmp((self.x, self.y), (other.x, other.y))
+
     def __eq__(self, other):
         return other.x == self.x and other.y == self.y
 
@@ -111,6 +114,16 @@ class Circle(Shape):
 
     def draw(self, canvas, at_point=origin, rotation=0):
         canvas.draw_circle(self.size, at_point, rotation)
+
+
+class CircleSegment(Shape):
+
+    def __init__(self, size, angle, center=origin):
+        super(CircleSegment, self).__init__(size, center)
+        self.angle = angle
+
+    def draw(self, canvas, at_point=origin, rotation=0):
+        canvas.draw_circular_segment(self.size, self.angle, at_point, rotation)
 
 
 class Triangle(Shape):
