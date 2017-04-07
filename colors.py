@@ -33,6 +33,9 @@ class Color(object):
     def hair(self):
         return self.__class__(self.r, self.g, self.b, 0.1)
 
+    def alpha(self, a):
+        return self.__class__(self.r, self.g, self.b, a)
+
     def distance_to(self, other_color):
         return sqrt((other_color.r - self.r)**2 + (other_color.g - self.g)**2 + (other_color.b - self.b)**2) # + (other_color.a - self.a)**2)
 
