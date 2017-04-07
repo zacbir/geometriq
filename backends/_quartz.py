@@ -59,9 +59,11 @@ quartz.CGColorSpaceCreateDeviceRGB.argtypes = []
 quartz.CGColorSpaceCreateWithName.restype = c_void_p
 quartz.CGColorSpaceCreateWithName.argtypes = [c_void_p]
 
+quartz.CGContextAddArc.argtypes = [c_void_p, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, c_int]
+
 quartz.CGContextAddEllipseInRect.argtypes = [c_void_p, CGRect]  # Double check
 
-quartz.CGContextAddPath.argtypes = [c_void_p, c_void_p]
+quartz.CGContextAddLineToPoint.argtypes = [c_void_p, CGFloat, CGFloat]
 
 quartz.CGContextAddRect.argtypes = [c_void_p, CGRect]  # Double check
 
@@ -71,6 +73,8 @@ quartz.CGContextConvertPointToDeviceSpace.argtypes = [c_void_p, CGPoint]
 quartz.CGContextDrawImage.argtypes = [c_void_p, CGRect, c_void_p]  # Double check
 
 quartz.CGContextDrawPath.argtypes = [c_void_p, CGPathDrawingMode]
+
+quartz.CGContextMoveToPoint.argtypes = [c_void_p, CGFloat, CGFloat]
 
 quartz.CGContextRotateCTM.argtypes = [c_void_p, CGFloat]
 
@@ -105,23 +109,17 @@ quartz.CGImageGetHeight.argtypes = [c_void_p]
 quartz.CGImageGetWidth.restype = c_size_t
 quartz.CGImageGetWidth.argtypes = [c_void_p]
 
-quartz.CGPathAddCurveToPoint.argtypes = [c_void_p, c_void_p, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat]
-
-quartz.CGPathAddLineToPoint.argtypes = [c_void_p, c_void_p, CGFloat, CGFloat]
-
-quartz.CGPathCreateMutable.restype = c_void_p
-
-quartz.CGPathMoveToPoint.argtypes = [c_void_p, c_void_p, CGFloat, CGFloat]
-
 CFURLCreateFromFileSystemRepresentation = quartz.CFURLCreateFromFileSystemRepresentation
 CGColorSpaceCreateDeviceRGB = quartz.CGColorSpaceCreateDeviceRGB
 CGColorSpaceCreateWithName = quartz.CGColorSpaceCreateWithName
+CGContextAddArc = quartz.CGContextAddArc
 CGContextAddEllipseInRect = quartz.CGContextAddEllipseInRect
-CGContextAddPath = quartz.CGContextAddPath
+CGContextAddLineToPoint = quartz.CGContextAddLineToPoint
 CGContextAddRect = quartz.CGContextAddRect
 CGContextConvertPointToToDeviceSpace = quartz.CGContextConvertPointToDeviceSpace
 CGContextDrawImage = quartz.CGContextDrawImage
 CGContextDrawPath = quartz.CGContextDrawPath
+CGContextMoveToPoint = quartz.CGContextMoveToPoint
 CGContextRotateCTM = quartz.CGContextRotateCTM
 CGContextSetLineWidth = quartz.CGContextSetLineWidth
 CGContextSetRGBFillColor = quartz.CGContextSetRGBFillColor
@@ -134,10 +132,6 @@ CGImageDestinationAddImage = quartz.CGImageDestinationAddImage
 CGImageDestinationFinalize = quartz.CGImageDestinationFinalize
 CGImageGetHeight = quartz.CGImageGetHeight
 CGImageGetWidth = quartz.CGImageGetWidth
-CGPathAddCurveToPoint = quartz.CGPathAddCurveToPoint
-CGPathAddLineToPoint = quartz.CGPathAddLineToPoint
-CGPathCreateMutable = quartz.CGPathCreateMutable
-CGPathMoveToPoint = quartz.CGPathMoveToPoint
 
 
 def CGImageDestinationCreateWithURL(a, b, c, d):
