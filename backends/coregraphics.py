@@ -67,6 +67,12 @@ class CoreGraphicsCanvas(BaseCanvas):
                 CGContextAddLineToPoint(r_t_context, to_point.x, to_point.y)
                 CGContextDrawPath(r_t_context, kCGPathFillStroke)
 
+    def draw_arc(self, radius, angle, at_point=origin, rotation=0):
+        with ContextTranslator(self.context, at_point) as t_context:
+            with ContextRotator(t_context, rotation) as r_t_context:
+                CGContextAddArc(r_t_context, origin.x, origin.y, radius, 0, radians(angle), 0)
+                CGContextDrawPath(r_t_context, kCGPathFillStroke)
+
     def draw_polygon(self, points, at_point=origin, rotation=0):
         drawn_points = points[:]
         with ContextTranslator(self.context, at_point) as t_context:
@@ -93,12 +99,6 @@ class CoreGraphicsCanvas(BaseCanvas):
                 CGContextAddArc(r_t_context, origin.x, origin.y, radius, 0, radians(angle), 0)
                 CGContextAddLineToPoint(r_t_context, origin.x, origin.y)
                 CGContextDrawPath(r_t_context, kCGPathFillStroke)
-
-    def draw_quarter_circle(self, radius, at_point=origin, rotation=0):
-        self.draw_circular_segment(radius, 90, at_point, rotation)
-
-    def draw_half_circle(self, radius, at_point=origin, rotation=0):
-        self.draw_circular_segment(radius, 180, at_point, rotation)
 
     def save(self):
         image = CGBitmapContextCreateImage(self.context)
