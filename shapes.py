@@ -90,30 +90,24 @@ class Shape(object):
         canvas.draw_polygon(self.points, at_point, rotation)
 
 
-class QuarterCircle(Shape):
+class Line(Shape):
 
-    def __init__(self, size, center=origin):
-        super(QuarterCircle, self).__init__(size, center)
-
-        self.first_point = Point(self.center.x + size, self.center.y)
-
-    def draw(self, canvas, at_point=origin, rotation=0):
-        canvas.draw_quarter_circle(self.size, at_point, rotation)
-
-
-class HalfCircle(QuarterCircle):
+    def __init__(self, to_point, center=origin):
+        self.center=center
+        self.to_point = to_point
 
     def draw(self, canvas, at_point=origin, rotation=0):
-        canvas.draw_half_circle(self.size, at_point, rotation)
+        canvas.draw_line(self.center, self.to_point, at_point, rotation)
 
 
-class Circle(Shape):
-
-    def __init__(self, size, center=origin):
-        super(Circle, self).__init__(size, center)
-
+class Arc(Shape):
+    
+    def __init__(self, size, angle, center=origin):
+        super(Arc, self).__init__(size, center)
+        self.angle = angle
+    
     def draw(self, canvas, at_point=origin, rotation=0):
-        canvas.draw_circle(self.size, at_point, rotation)
+        canvas.draw_arc(self.size, self.angle, at_point, rotation)
 
 
 class CircleSegment(Shape):
@@ -124,6 +118,27 @@ class CircleSegment(Shape):
 
     def draw(self, canvas, at_point=origin, rotation=0):
         canvas.draw_circular_segment(self.size, self.angle, at_point, rotation)
+
+
+class QuarterCircle(CircleSegment):
+
+    def __init__(self, size, center=origin):
+        super(QuarterCircle, self).__init__(size, radians(90), center)
+
+
+class HalfCircle(CircleSegment):
+
+    def __init__(self, size, center=origin):
+        super(QuarterCircle, self).__init__(size, radians(180), center)
+
+
+class Circle(Shape):
+
+    def __init__(self, size, center=origin):
+        super(Circle, self).__init__(size, center)
+
+    def draw(self, canvas, at_point=origin, rotation=0):
+        canvas.draw_circle(self.size, at_point, rotation)
 
 
 class Triangle(Shape):
@@ -189,3 +204,5 @@ class Hexagon(Shape):
             Point(x - self.size, y),
             Point(x - sz, y + self.step)
         )]
+
+
