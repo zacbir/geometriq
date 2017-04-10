@@ -1,4 +1,4 @@
-from math import sqrt, ceil
+from math import sqrt
 
 from .shapes import Point
 
@@ -17,7 +17,7 @@ class Grid(object):
         pass
 
     def _offsets(self, x, y):
-        return (x, y)
+        return x, y
 
     def _mirrored_points(self, x, y, x_idx, y_idx):
         mirror = set()
@@ -156,4 +156,3 @@ class VerticalHexagonGrid(Grid):
                 points.update(self._mirrored_points(p_x, p_y, x, y))
 
         return points
-
