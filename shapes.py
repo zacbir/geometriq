@@ -1,4 +1,4 @@
-from math import sqrt, cos, sin, radians
+from math import sqrt, radians
 import itertools
 
 """
@@ -75,8 +75,6 @@ class Shape(object):
         self.points = []
 
     def paths(self):
-        paths = []
-
         end_points = self.points[:]
         end_points.append(end_points.pop(0))
         return itertools.izip(self.points, end_points)
@@ -93,7 +91,7 @@ class Shape(object):
 class Line(Shape):
 
     def __init__(self, to_point, center=origin):
-        self.center=center
+        super(Line, self).__init__(0, center)
         self.to_point = to_point
 
     def draw(self, canvas, at_point=origin, rotation=0):
@@ -129,7 +127,7 @@ class QuarterCircle(CircleSegment):
 class HalfCircle(CircleSegment):
 
     def __init__(self, size, center=origin):
-        super(QuarterCircle, self).__init__(size, radians(180), center)
+        super(HalfCircle, self).__init__(size, radians(180), center)
 
 
 class Circle(Shape):
@@ -141,20 +139,62 @@ class Circle(Shape):
         canvas.draw_circle(self.size, at_point, rotation)
 
 
-class Triangle(Shape):
+class _Triangle(Shape):
 
     def __init__(self, size, center=origin, grid=None):
-        super(Triangle, self).__init__(size, center, grid)
+        super(_Triangle, self).__init__(size, center, grid)
 
         self.step = sqrt(self.size**2 - (self.size / 2)**2)
         self.r = sqrt(3) * self.size / 6
 
+        self._setup_points()
+
+    def _setup_points(self):
+        pass
+
+
+class NorthTriangle(_Triangle):
+
+    def _setup_points(self):
         x, y = self.center.x, self.center.y
 
         [self.add_point(x) for x in (
             Point(x - (self.size / 2), y - self.r),
             Point(x, y + (self.step - self.r)),
             Point(x + (self.size / 2), y - self.r))]
+
+
+class EastTriangle(_Triangle):
+
+    def _setup_points(self):
+        x, y = self.center.x, self.center.y
+
+        [self.add_point(x) for x in (
+            Point(x - self.r, y - (self.size / 2)),
+            Point(x - self.r, y + (self.size / 2)),
+            Point(x + (self.step - self.r), y))]
+
+
+class SouthTriangle(_Triangle):
+
+    def _setup_points(self):
+        x, y = self.center.x, self.center.y
+
+        [self.add_point(x) for x in (
+            Point(x - (self.size / 2), y + self.r),
+            Point(x + (self.size / 2), y + self.r),
+            Point(x, y - (self.step - self.r)))]
+
+
+class WestTriangle(_Triangle):
+
+    def _setup_points(self):
+        x, y = self.center.x, self.center.y
+
+        [self.add_point(x) for x in (
+            Point(x - (self.step - self.r), y),
+            Point(x + self.r, y + (self.size / 2)),
+            Point(x + self.r, y - (self.size / 2)))]
 
 
 class HexagonalRhombus(Shape):
@@ -187,13 +227,36 @@ class Square(Shape):
             Point(x + sz, y - sz))]
 
 
-class Hexagon(Shape):
+class Diamond(Shape):
+
+    def __init__(self, size, center=origin):
+        super(Diamond, self).__init__(size, center)
+        self.step = sqrt(self.size ** 2 / 2)
+        x, y = self.center.x, self.center.y
+
+        [self.add_point(x) for x in (
+            Point(x - self.step, y),
+            Point(x, y + self.step),
+            Point(x + self.step, y),
+            Point(x, y - self.step))]
+
+
+class _Hexagon(Shape):
 
     def __init__(self, size, center=origin, grid=None):
-        super(Hexagon, self).__init__(size, center, grid)
+        super(_Hexagon, self).__init__(size, center, grid)
 
         self.step = sqrt(self.size**2 - (self.size / 2)**2)
 
+        self._setup_points()
+
+    def _setup_points(self):
+        pass
+
+
+class HorizontalHexagon(_Hexagon):
+
+    def _setup_points(self):
         x, y, sz = self.center.x, self.center.y, self.size / 2
 
         [self.add_point(x) for x in (
@@ -202,7 +265,23 @@ class Hexagon(Shape):
             Point(x + sz, y - self.step),
             Point(x - sz, y - self.step),
             Point(x - self.size, y),
-            Point(x - sz, y + self.step)
-        )]
+            Point(x - sz, y + self.step))]
 
 
+class VerticalHexagon(_Hexagon):
+
+    def _setup_points(self):
+        x, y, sz = self.center.x, self.center.y, self.size / 2
+
+        [self.add_point(x) for x in (
+            Point(x, y + self.size),
+            Point(x + self.step, y + sz),
+            Point(x + self.step, y - sz),
+            Point(x, y - self.size),
+            Point(x - self.step, y - sz),
+            Point(x - self.step, y + sz))]
+
+
+# Useful aliases for use with translated/rotated contexts
+Triangle = NorthTriangle
+Hexagon = VerticalHexagon
