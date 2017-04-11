@@ -36,6 +36,7 @@ class ContextRotator:
 
 
 class CoreGraphicsCanvas(BaseCanvas):
+
     def __init__(self, name, width, height=None):
         height = height if height else width
         super(CoreGraphicsCanvas, self).__init__(name, width, height)
@@ -84,11 +85,11 @@ class CoreGraphicsCanvas(BaseCanvas):
                 CGContextAddLineToPoint(r_t_context, starting_point.x, starting_point.y)
                 CGContextDrawPath(r_t_context, kCGPathFillStroke)
 
-    def draw_circle(self, radius, at_point=origin, rotation=0):
+    def draw_circle(self, radius, center,  at_point=origin, rotation=0):
         with ContextTranslator(self.context, at_point) as t_context:
             with ContextRotator(t_context, rotation) as r_t_context:
                 CGContextAddEllipseInRect(r_t_context,
-                                          CGRect((origin.x - radius, origin.y - radius), (radius * 2, radius * 2)))
+                                          CGRect((center.x - radius, center.y - radius), (radius * 2, radius * 2)))
                 CGContextDrawPath(r_t_context, kCGPathFillStroke)
 
     def draw_circular_segment(self, radius, angle, at_point=origin, rotation=0):
@@ -107,5 +108,5 @@ class CoreGraphicsCanvas(BaseCanvas):
         dest = CGImageDestinationCreateWithURL(url, 'public.png', 1, None)
         CGImageDestinationAddImage(dest, image, None)
         CGImageDestinationFinalize(dest)
-
+        return filename
 
