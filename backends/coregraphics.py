@@ -92,7 +92,7 @@ class CoreGraphicsCanvas(BaseCanvas):
                                           CGRect((center.x - radius, center.y - radius), (radius * 2, radius * 2)))
                 CGContextDrawPath(r_t_context, kCGPathFillStroke)
 
-    def draw_circular_segment(self, radius, center, angle, at_point=origin, rotation=0):
+    def draw_circular_segment(self, radius, angle, center, at_point=origin, rotation=0):
         with ContextTranslator(self.context, at_point) as t_context:
             with ContextRotator(t_context, rotation) as r_t_context:
                 CGContextMoveToPoint(r_t_context, center.x, center.y)
