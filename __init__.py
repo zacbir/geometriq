@@ -11,5 +11,7 @@ from .solarized import *
 
 def band(iterable, value, upper_bounds, lower_bounds=0):
     percentile = float((value - lower_bounds) / (upper_bounds - lower_bounds))
-    idx = round(percentile * (len(iterable) - 1))
+    idx = int(round(percentile * (len(iterable) - 1)))
+    idx = 0 if idx < 0 else idx
+    idx = -1 if idx >= len(iterable) else idx
     return iterable[idx]

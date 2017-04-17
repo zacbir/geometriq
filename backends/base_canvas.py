@@ -23,6 +23,7 @@ class BaseCanvas(object):
         self.stroke_color = None
         self.fill_color = None
 
+    @property
     def center(self):
         return Point(self.width / 2, self.height / 2)
 

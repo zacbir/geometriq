@@ -48,6 +48,18 @@ class Point(object):
     def __eq__(self, other):
         return other.x == self.x and other.y == self.y
 
+    def __gt__(self, other):
+        return self.x > other.x and self.y > other.y
+    
+    def __ge__(self, other):
+        return self.x >= other.x and self.y >= other.y
+    
+    def __lt__(self, other):
+        return self.x < other.x and self.y < other.y
+    
+    def __le__(self, other):
+        return self.x <= other.x and self.y <= other.y
+
     def __hash__(self):
         return hash(self.__key())
 
@@ -105,7 +117,7 @@ class Arc(Shape):
         self.angle = angle
     
     def draw(self, canvas, at_point=origin, rotation=0):
-        canvas.draw_arc(self.size, self.angle, at_point, rotation)
+        canvas.draw_arc(self.size, self.angle, self.center, at_point, rotation)
 
 
 class CircleSegment(Shape):
@@ -115,19 +127,19 @@ class CircleSegment(Shape):
         self.angle = angle
 
     def draw(self, canvas, at_point=origin, rotation=0):
-        canvas.draw_circular_segment(self.size, self.angle, at_point, rotation)
+        canvas.draw_circular_segment(self.size, self.center, self.angle, at_point, rotation)
 
 
 class QuarterCircle(CircleSegment):
 
     def __init__(self, size, center=origin):
-        super(QuarterCircle, self).__init__(size, radians(90), center)
+        super(QuarterCircle, self).__init__(size, 90, center)
 
 
 class HalfCircle(CircleSegment):
 
     def __init__(self, size, center=origin):
-        super(HalfCircle, self).__init__(size, radians(180), center)
+        super(HalfCircle, self).__init__(size, 180, center)
 
 
 class Circle(Shape):
@@ -136,7 +148,7 @@ class Circle(Shape):
         super(Circle, self).__init__(size, center)
 
     def draw(self, canvas, at_point=origin, rotation=0):
-        canvas.draw_circle(self.size, at_point, rotation)
+        canvas.draw_circle(self.size, self.center, at_point, rotation)
 
 
 class _Triangle(Shape):

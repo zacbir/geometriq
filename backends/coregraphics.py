@@ -25,7 +25,7 @@ class ContextRotator:
 
     def __init__(self, context, rotation):
         self.context = context
-        self.rotation = rotation
+        self.rotation = radians(rotation)
 
     def __enter__(self):
         CGContextRotateCTM(self.context, self.rotation)
@@ -68,10 +68,10 @@ class CoreGraphicsCanvas(BaseCanvas):
                 CGContextAddLineToPoint(r_t_context, to_point.x, to_point.y)
                 CGContextDrawPath(r_t_context, kCGPathFillStroke)
 
-    def draw_arc(self, radius, angle, at_point=origin, rotation=0):
+    def draw_arc(self, radius, angle, center, at_point=origin, rotation=0):
         with ContextTranslator(self.context, at_point) as t_context:
             with ContextRotator(t_context, rotation) as r_t_context:
-                CGContextAddArc(r_t_context, origin.x, origin.y, radius, 0, radians(angle), 0)
+                CGContextAddArc(r_t_context, center.x, center.y, radius, 0, radians(angle), 0)
                 CGContextDrawPath(r_t_context, kCGPathFillStroke)
 
     def draw_polygon(self, points, at_point=origin, rotation=0):
@@ -92,13 +92,13 @@ class CoreGraphicsCanvas(BaseCanvas):
                                           CGRect((center.x - radius, center.y - radius), (radius * 2, radius * 2)))
                 CGContextDrawPath(r_t_context, kCGPathFillStroke)
 
-    def draw_circular_segment(self, radius, angle, at_point=origin, rotation=0):
+    def draw_circular_segment(self, radius, center, angle, at_point=origin, rotation=0):
         with ContextTranslator(self.context, at_point) as t_context:
             with ContextRotator(t_context, rotation) as r_t_context:
-                CGContextMoveToPoint(r_t_context, origin.x, origin.y)
-                CGContextAddLineToPoint(r_t_context, origin.x + radius, origin.y)
-                CGContextAddArc(r_t_context, origin.x, origin.y, radius, 0, radians(angle), 0)
-                CGContextAddLineToPoint(r_t_context, origin.x, origin.y)
+                CGContextMoveToPoint(r_t_context, center.x, center.y)
+                CGContextAddLineToPoint(r_t_context, center.x + radius, center.y)
+                CGContextAddArc(r_t_context, center.x, center.y, radius, 0, radians(angle), 0)
+                CGContextAddLineToPoint(r_t_context, center.x, center.y)
                 CGContextDrawPath(r_t_context, kCGPathFillStroke)
 
     def save(self):

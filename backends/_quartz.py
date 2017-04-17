@@ -125,7 +125,6 @@ CGContextSetLineWidth = quartz.CGContextSetLineWidth
 CGContextSetRGBFillColor = quartz.CGContextSetRGBFillColor
 CGContextSetRGBStrokeColor = quartz.CGContextSetRGBStrokeColor
 CGContextTranslateCTM = quartz.CGContextTranslateCTM
-CGDataProviderCreateWithFilename = quartz.CGDataProviderCreateWithFilename
 CGImageCreateWithJPEGDataProvider = quartz.CGImageCreateWithJPEGDataProvider
 CGImageCreateWithPNGDataProvider = quartz.CGImageCreateWithPNGDataProvider
 CGImageDestinationAddImage = quartz.CGImageDestinationAddImage
@@ -145,3 +144,7 @@ def CGBitmapContextCreate(a, b, c, d, e, f, g):
 
 def CGBitmapContextCreateImage(a):
     return ObjCInstance(quartz.CGBitmapContextCreateImage(a))
+
+def CGDataProviderCreateWithFilename(a):
+    return ObjCInstance(quartz.CGDataProviderCreateWithFilename(a.encode()))
+
