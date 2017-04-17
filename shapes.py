@@ -96,8 +96,8 @@ class Shape(object):
             point = self.grid.closest_point_to(point)
         self.points.append(point)
 
-    def draw(self, canvas, at_point=origin, rotation=0):
-        canvas.draw_polygon(self.points, at_point, rotation)
+    def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+        canvas.draw_polygon(self.points, at_point, rotation, scale_x, scale_y)
 
 
 class Line(Shape):
@@ -106,8 +106,8 @@ class Line(Shape):
         super(Line, self).__init__(0, center)
         self.to_point = to_point
 
-    def draw(self, canvas, at_point=origin, rotation=0):
-        canvas.draw_line(self.center, self.to_point, at_point, rotation)
+    def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+        canvas.draw_line(self.center, self.to_point, at_point, rotation, scale_x, scale_y)
 
 
 class Arc(Shape):
@@ -116,8 +116,8 @@ class Arc(Shape):
         super(Arc, self).__init__(size, center)
         self.angle = angle
     
-    def draw(self, canvas, at_point=origin, rotation=0):
-        canvas.draw_arc(self.size, self.angle, self.center, at_point, rotation)
+    def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+        canvas.draw_arc(self.size, self.angle, self.center, at_point, rotation, scale_x, scale_y)
 
 
 class QuarterCircle(Arc):
@@ -138,20 +138,20 @@ class CircleSegment(Shape):
         super(CircleSegment, self).__init__(size, center)
         self.angle = angle
 
-    def draw(self, canvas, at_point=origin, rotation=0):
-        canvas.draw_circular_segment(self.size, self.angle, self.center, at_point, rotation)
+    def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+        canvas.draw_circular_segment(self.size, self.angle, self.center, at_point, rotation, scale_x, scale_y)
 
 
 class QuarterCircleSegment(CircleSegment):
 
     def __init__(self, size, center=origin):
-        super(QuarterCircle, self).__init__(size, 90, center)
+        super(QuarterCircleSegment, self).__init__(size, 90, center)
 
 
 class HalfCircleSegment(CircleSegment):
 
     def __init__(self, size, center=origin):
-        super(HalfCircle, self).__init__(size, 180, center)
+        super(HalfCircleSegment, self).__init__(size, 180, center)
 
 
 class Circle(Shape):
@@ -159,8 +159,8 @@ class Circle(Shape):
     def __init__(self, size, center=origin):
         super(Circle, self).__init__(size, center)
 
-    def draw(self, canvas, at_point=origin, rotation=0):
-        canvas.draw_circle(self.size, self.center, at_point, rotation)
+    def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+        canvas.draw_circle(self.size, self.center, at_point, rotation, scale_x, scale_y)
 
 
 class _Triangle(Shape):

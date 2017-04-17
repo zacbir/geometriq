@@ -78,6 +78,8 @@ quartz.CGContextMoveToPoint.argtypes = [c_void_p, CGFloat, CGFloat]
 
 quartz.CGContextRotateCTM.argtypes = [c_void_p, CGFloat]
 
+quartz.CGContextScaleCTM.argtypes = [c_void_p, CGFloat, CGFloat]
+
 quartz.CGContextSetLineWidth.argtypes = [c_void_p, CGFloat]
 
 quartz.CGContextSetRGBFillColor.argtypes = [c_void_p, CGFloat, CGFloat, CGFloat, CGFloat]
@@ -121,6 +123,7 @@ CGContextDrawImage = quartz.CGContextDrawImage
 CGContextDrawPath = quartz.CGContextDrawPath
 CGContextMoveToPoint = quartz.CGContextMoveToPoint
 CGContextRotateCTM = quartz.CGContextRotateCTM
+CGContextScaleCTM = quartz.CGContextScaleCTM
 CGContextSetLineWidth = quartz.CGContextSetLineWidth
 CGContextSetRGBFillColor = quartz.CGContextSetRGBFillColor
 CGContextSetRGBStrokeColor = quartz.CGContextSetRGBStrokeColor
