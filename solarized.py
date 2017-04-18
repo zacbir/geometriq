@@ -65,6 +65,10 @@ backgrounds = [base03, base02, base2, base3]
 
 strokes = [base01, base00, base0, base1]
 
-fills = [red, orange, yellow, green, cyan, blue, violet, magenta]
+fills = [magenta, red, orange, yellow, green, cyan, blue, violet]
+
+warms = [magenta, red, orange, yellow]
+
+cools = [green, cyan, blue, violet]
 
 contrast = [(base03, base1), (base3, base01)]
