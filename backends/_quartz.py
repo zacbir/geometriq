@@ -92,10 +92,10 @@ quartz.CGDataProviderCreateWithFilename.restype = c_void_p
 quartz.CGDataProviderCreateWithFilename.argtypes = [c_char_p]
 
 quartz.CGImageCreateWithJPEGDataProvider.restype = c_void_p
-quartz.CGImageCreateWithJPEGDataProvider.argtypes = [c_void_p, CGFloat, c_bool, CGColorRenderingIntent]
+quartz.CGImageCreateWithJPEGDataProvider.argtypes = [c_void_p, POINTER(CGFloat), c_bool, CGColorRenderingIntent]
 
 quartz.CGImageCreateWithPNGDataProvider.restype = c_void_p
-quartz.CGImageCreateWithPNGDataProvider.argtypes = [c_void_p, CGFloat, c_bool, CGColorRenderingIntent]
+quartz.CGImageCreateWithPNGDataProvider.argtypes = [c_void_p, POINTER(CGFloat), c_bool, CGColorRenderingIntent]
 
 quartz.CGImageDestinationAddImage.argtypes = [c_void_p, c_void_p, c_void_p]
 
