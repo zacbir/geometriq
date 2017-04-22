@@ -58,6 +58,18 @@ class CoreGraphicsCanvas(BaseCanvas):
 
         self.colorSpace = CGColorSpaceCreateDeviceRGB()
         self.context = CGBitmapContextCreate(None, width, height, 8, width * 4, self.colorSpace, kCGImageAlphaPremultipliedLast)
+    
+    def set_line_join(self, join_style):
+        self.join_style = join_style
+        CGContextSetLineJoin(self.context, self.join_style)
+    
+    def set_line_cap(self, cap_style):
+        self.cap_style = cap_style
+        CGContextSetLineCap(self.context, self.cap_style)
+        
+    def set_miter_limit(self, miter_limit):
+        self.miter_limit = miter_limit
+        CGContextSetMiterLimit(self.context, self.miter_limit)
 
     def set_stroke_width(self, stroke_width):
         self.stroke_width = stroke_width
