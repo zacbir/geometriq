@@ -11,6 +11,8 @@ else:
 quartz = c
 
 CGBitmapInfo = c_uint32  # CGImage.h
+CGLineCap = c_int32  # CGPath.h
+CGLineJoin = c_int32  # CGPath.h
 CGPathDrawingMode = c_int32  # CGContext.h
 CGColorRenderingIntent = c_int32  # CGColorSpace.h
 
@@ -40,6 +42,12 @@ kCGColorSpaceSRGB = ObjCInstance(c_void_p.in_dll(quartz, 'kCGColorSpaceSRGB'))
 kCGImageAlphaPremultipliedLast = 1
 kCGPathFillStroke = 3
 kCGRenderingIntentDefault = 0
+kCGLineJoinMiter = 0
+kCGLineJoinRound = 1
+kCGLineJoinBevel = 2
+kCGLineCapButt = 0
+kCGLineCapRound = 1
+kCGLineCapSquare = 2
 
 ##############
 # Functions
@@ -80,7 +88,13 @@ quartz.CGContextRotateCTM.argtypes = [c_void_p, CGFloat]
 
 quartz.CGContextScaleCTM.argtypes = [c_void_p, CGFloat, CGFloat]
 
+quartz.CGContextSetLineCap.argtypes = [c_void_p, CGLineCap]
+
+quartz.CGContextSetLineJoin.argtypes = [c_void_p, CGLineJoin]
+
 quartz.CGContextSetLineWidth.argtypes = [c_void_p, CGFloat]
+
+quartz.CGContextSetMiterLimit.argtypes = [c_void_p, CGFloat]
 
 quartz.CGContextSetRGBFillColor.argtypes = [c_void_p, CGFloat, CGFloat, CGFloat, CGFloat]
 
@@ -124,12 +138,13 @@ CGContextDrawPath = quartz.CGContextDrawPath
 CGContextMoveToPoint = quartz.CGContextMoveToPoint
 CGContextRotateCTM = quartz.CGContextRotateCTM
 CGContextScaleCTM = quartz.CGContextScaleCTM
+CGContextSetLineCap = quartz.CGContextSetLineCap
+CGContextSetLineJoin = quartz.CGContextSetLineJoin
 CGContextSetLineWidth = quartz.CGContextSetLineWidth
+CGContextSetMiterLimit = quartz.CGContextSetMiterLimit
 CGContextSetRGBFillColor = quartz.CGContextSetRGBFillColor
 CGContextSetRGBStrokeColor = quartz.CGContextSetRGBStrokeColor
 CGContextTranslateCTM = quartz.CGContextTranslateCTM
-CGImageCreateWithJPEGDataProvider = quartz.CGImageCreateWithJPEGDataProvider
-CGImageCreateWithPNGDataProvider = quartz.CGImageCreateWithPNGDataProvider
 CGImageDestinationAddImage = quartz.CGImageDestinationAddImage
 CGImageDestinationFinalize = quartz.CGImageDestinationFinalize
 CGImageGetHeight = quartz.CGImageGetHeight
@@ -140,14 +155,18 @@ def CGImageDestinationCreateWithURL(a, b, c, d):
     # arg 2 needs to be nsstring
     return quartz.CGImageDestinationCreateWithURL(a, ns(b), c, d)
 
-
 def CGBitmapContextCreate(a, b, c, d, e, f, g):
     return ObjCInstance(quartz.CGBitmapContextCreate(a, b, c, d, e, f, g))
-
 
 def CGBitmapContextCreateImage(a):
     return ObjCInstance(quartz.CGBitmapContextCreateImage(a))
 
 def CGDataProviderCreateWithFilename(a):
     return ObjCInstance(quartz.CGDataProviderCreateWithFilename(a.encode()))
+
+def CGImageCreateWithJPEGDataProvider(a, b, c, d):
+    return ObjCInstance(quartz.CGImageCreateWithJPEGDataProvider(a, b, c, d))
+    
+def CGImageCreateWithPNGDataProvider(a, b, c, d):
+    return ObjCInstance(quartz.CGImageCreateWithPNGDataProvider(a, b, c, d))
 
