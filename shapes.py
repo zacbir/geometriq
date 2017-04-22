@@ -110,6 +110,18 @@ class Line(Shape):
         canvas.draw_line(self.center, self.to_point, at_point, rotation, scale_x, scale_y)
 
 
+class Rectangle(Line):
+    
+    def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+        points = [
+            self.center,
+            Point(self.center.x, self.to_point.y),
+            self.to_point,
+            Point(self.to_point.x, self.center.y)
+        ]
+        canvas.draw_polygon(points, at_point, rotation, scale_x, scale_y)
+
+
 class Arc(Shape):
     
     def __init__(self, size, angle, center=origin):
