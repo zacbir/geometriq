@@ -1,4 +1,4 @@
-from array import array
+from ctypes import *
 import os.path
 
 from .backends.quartz import *
@@ -15,8 +15,9 @@ class ReferenceImage(object):
     }
 
     def __init__(self, image_path, canvas):
+        import pdb; pdb.set_trace()
         self.canvas = canvas
-        data_provider = CGDataProviderCreateWithFilename(image_path)
+        data_provider = CGDataProviderCreateWithFilename(os.path.abspath(image_path))
         ext = os.path.splitext(image_path)[-1].lower()
         image_func = self.data_provider_func[ext]
         self.image = image_func(data_provider, None, False, kCGRenderingIntentDefault)
@@ -26,10 +27,11 @@ class ReferenceImage(object):
         self.bytes_per_pixel = 4
         self.bytes_per_row = self.bytes_per_pixel * self.width
         bits_per_component = 8
-        self.raw_data = array('B', (0 for i in range(self.width * self.height * self.bytes_per_pixel)))
+        self.raw_data = (c_byte * self.width * self.height * self.bytes_per_pixel)()
+        # self.raw_data = array('B', (0 for i in range(self.width * self.height * self.bytes_per_pixel)))
         context = CGBitmapContextCreate(self.raw_data, self.width, self.height, bits_per_component, self.bytes_per_row,
                                         color_space, kCGImageAlphaPremultipliedLast)
-        CGContextDrawImage(context, CGRectMake(0, 0, self.width, self.height), self.image)
+        CGContextDrawImage(context, CGRect((0, 0), (self.width, self.height)), self.image)
 
     def transform_point(self, point, crop=False):
         """
