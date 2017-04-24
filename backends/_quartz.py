@@ -75,6 +75,8 @@ quartz.CGContextAddLineToPoint.argtypes = [c_void_p, CGFloat, CGFloat]
 
 quartz.CGContextAddRect.argtypes = [c_void_p, CGRect]  # Double check
 
+quartz.CGContextClosePath.argtypes = [c_void_p]
+
 quartz.CGContextConvertPointToDeviceSpace.restype = CGPoint
 quartz.CGContextConvertPointToDeviceSpace.argtypes = [c_void_p, CGPoint]
 

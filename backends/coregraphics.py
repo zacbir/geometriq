@@ -113,6 +113,7 @@ class CoreGraphicsCanvas(BaseCanvas):
                     for next_point in drawn_points:
                         CGContextAddLineToPoint(r_t_context, next_point.x, next_point.y)
                     CGContextAddLineToPoint(r_t_context, starting_point.x, starting_point.y)
+                    CGContextClosePath(r_t_context)
                     CGContextDrawPath(r_t_context, kCGPathFillStroke)
 
     def draw_circle(self, radius, center,  at_point=origin, rotation=0, scale_x=1, scale_y=None):
