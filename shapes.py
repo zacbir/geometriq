@@ -37,7 +37,7 @@ class Point(object):
         return sqrt((self.x - other_point.x)**2 + (self.y - other_point.y)**2)
 
     def __repr__(self):
-        return u'<Point x: {}, y: {}>'.format(self.x, self.y)
+        return u'Point(x={}, y={})'.format(self.x, self.y)
 
     def __key(self):
         return self.x - 0, self.y - 0
@@ -46,7 +46,7 @@ class Point(object):
         return cmp((self.x, self.y), (other.x, other.y))
 
     def __eq__(self, other):
-        return other.x == self.x and other.y == self.y
+        return self.x == other.x and self.y == other.y
 
     def __gt__(self, other):
         return self.x > other.x and self.y > other.y

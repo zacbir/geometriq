@@ -40,7 +40,7 @@ class Color(object):
         return sqrt((other_color.r - self.r)**2 + (other_color.g - self.g)**2 + (other_color.b - self.b)**2) # + (other_color.a - self.a)**2)
 
     def __repr__(self):
-        return '<Color r:{} g:{} b:{} a:{}>'.format(*self.rgba())
+        return 'Color(r={}, g={}, b={}, a={})'.format(*self.rgba())
 
 
 clear = Color(0, 0, 0, 0)
