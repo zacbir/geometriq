@@ -15,7 +15,6 @@ class ReferenceImage(object):
     }
 
     def __init__(self, image_path, canvas):
-        import pdb; pdb.set_trace()
         self.canvas = canvas
         data_provider = CGDataProviderCreateWithFilename(os.path.abspath(image_path))
         ext = os.path.splitext(image_path)[-1].lower()
