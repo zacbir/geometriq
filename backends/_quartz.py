@@ -134,6 +134,7 @@ CGContextAddArc = quartz.CGContextAddArc
 CGContextAddEllipseInRect = quartz.CGContextAddEllipseInRect
 CGContextAddLineToPoint = quartz.CGContextAddLineToPoint
 CGContextAddRect = quartz.CGContextAddRect
+CGContextClosePath = quartz.CGContextClosePath
 CGContextConvertPointToToDeviceSpace = quartz.CGContextConvertPointToDeviceSpace
 CGContextDrawImage = quartz.CGContextDrawImage
 CGContextDrawPath = quartz.CGContextDrawPath
