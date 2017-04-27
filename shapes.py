@@ -97,7 +97,8 @@ class Shape(object):
         self.points.append(point)
 
     def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
-        canvas.draw_polygon(self.points, at_point, rotation, scale_x, scale_y)
+        points_to_draw = filter(None, self.points)
+        canvas.draw_polygon(points_to_draw, at_point, rotation, scale_x, scale_y)
 
 
 class Line(Shape):
@@ -105,6 +106,22 @@ class Line(Shape):
     def __init__(self, to_point, center=origin):
         super(Line, self).__init__(0, center)
         self.to_point = to_point
+        try:
+            self.slope = (self.center.y - self.to_point.y) / (self.center.x - self.to_point.x)
+            self.intercept = self.center.y - (self.center.x * self.slope)
+        except ZeroDivisionError:
+            self.slope = None
+            self.intercept = None
+    
+    def midpoint(self):
+        return Point((self.to_point.x + self.center.x) / 2, (self.to_point.y + self.center.y) / 2)
+    
+    def intersection_with(self, other_line):
+        if self.slope == other_line.slope:
+            return None  # parallel
+        x = (other_line.intercept - self.intercept) / (self.slope - other_line.slope)
+        y = self.slope * x + self.intercept
+        return Point(x, y)
 
     def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         canvas.draw_line(self.center, self.to_point, at_point, rotation, scale_x, scale_y)

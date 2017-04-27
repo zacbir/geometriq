@@ -10,7 +10,10 @@ from .solarized import *
 
 
 def band(iterable, value, upper_bounds, lower_bounds=0):
-    percentile = float((value - lower_bounds) / (upper_bounds - lower_bounds))
+    v = float(value)
+    u_b = float(upper_bounds)
+    l_b = float(lower_bounds)
+    percentile = (v - l_b) / (u_b - l_b)
     idx = int(round(percentile * (len(iterable) - 1)))
     idx = 0 if idx < 0 else idx
     idx = -1 if idx >= len(iterable) else idx
