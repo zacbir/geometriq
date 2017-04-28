@@ -1,5 +1,6 @@
-from math import sqrt, radians
+from math import sqrt
 import itertools
+import random
 
 """
 Simple geometric shape models.
@@ -112,9 +113,21 @@ class Line(Shape):
         except ZeroDivisionError:
             self.slope = None
             self.intercept = None
-    
+
+    def __repr__(self):
+        return "Line({}, center={})".format(self.to_point, self.center)
+
+    @property
+    def length(self):
+        return self.center.distance_to(self.to_point)
+
     def midpoint(self):
         return Point((self.to_point.x + self.center.x) / 2, (self.to_point.y + self.center.y) / 2)
+
+    def point_from_center(self, distance):
+        ratio = float(distance) / self.length
+        return Point(((1 - ratio) * self.center.x) + (ratio * self.to_point.x),
+                     ((1 - ratio) * self.center.y) + (ratio * self.to_point.y))
     
     def intersection_with(self, other_line):
         if self.slope == other_line.slope:
@@ -122,6 +135,11 @@ class Line(Shape):
         x = (other_line.intercept - self.intercept) / (self.slope - other_line.slope)
         y = self.slope * x + self.intercept
         return Point(x, y)
+
+    def extended(self):
+        new_center = self.point_from_center(-1 * random.random() * 0.05 * self.length)
+        new_to_point = self.point_from_center(self.length + random.random() * 0.05 * self.length)
+        return self.__class__(new_to_point, new_center)
 
     def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         canvas.draw_line(self.center, self.to_point, at_point, rotation, scale_x, scale_y)
