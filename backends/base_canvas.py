@@ -1,4 +1,6 @@
-from ..shapes import Point
+import random
+
+from ..shapes import Point, origin
 
 
 class BaseCanvas(object):
@@ -26,6 +28,14 @@ class BaseCanvas(object):
     @property
     def center(self):
         return Point(self.width / 2, self.height / 2)
+
+    def random_point(self):
+        return Point(random.random() * self.width, random.random() * self.height)
+        
+    def longest_distance_from(self, point):
+        corners = (origin, Point(0, self.height), Point(self.width, self.height), Point(self.width, 0))
+        
+        return max([point.distance_to(x) for x in corners])
 
     def set_stroke_width(self, stroke_width):
         self.stroke_width = stroke_width
