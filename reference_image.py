@@ -1,4 +1,5 @@
-from ctypes import *
+#from ctypes import *
+from array import array
 import os.path
 
 from .backends.quartz import *
@@ -26,8 +27,8 @@ class ReferenceImage(object):
         self.bytes_per_pixel = 4
         self.bytes_per_row = self.bytes_per_pixel * self.width
         bits_per_component = 8
-        self.raw_data = (c_byte * self.width * self.height * self.bytes_per_pixel)()
-        # self.raw_data = array('B', (0 for i in range(self.width * self.height * self.bytes_per_pixel)))
+        # self.raw_data = (c_byte * self.width * self.height * self.bytes_per_pixel)()
+        self.raw_data = array('B', (0 for i in range(self.width * self.height * self.bytes_per_pixel)))
         context = CGBitmapContextCreate(self.raw_data, self.width, self.height, bits_per_component, self.bytes_per_row,
                                         color_space, kCGImageAlphaPremultipliedLast)
         CGContextDrawImage(context, CGRect((0, 0), (self.width, self.height)), self.image)

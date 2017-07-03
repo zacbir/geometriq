@@ -52,10 +52,10 @@ class ContextScalor:
 def call_decorator(f):
 
     def log_and_call(*args, **kw):
-        args_join = ", ".join([repr(x) for x in args[1:]])
-        kw_join = ", ".join(['{}={}'.format(repr(k), repr(v)) for (k, v) in kw.items()])
+        # args_join = ", ".join([repr(x) for x in args[1:]])
+        # kw_join = ", ".join(['{}={}'.format(repr(k), repr(v)) for (k, v) in kw.items()])
 
-        args[0].log("canvas.{}({}{})".format(f.__name__, args_join, ", {}".format(kw_join) if kw_join else ""))
+        # args[0].log("canvas.{}({}{})".format(f.__name__, args_join, ", {}".format(kw_join) if kw_join else ""))
 
         return f(*args, **kw)
 

@@ -39,6 +39,14 @@ class Color(object):
     def distance_to(self, other_color):
         return sqrt((other_color.r - self.r)**2 + (other_color.g - self.g)**2 + (other_color.b - self.b)**2) # + (other_color.a - self.a)**2)
 
+    def gradient_to(self, other_color, steps):
+        for s in range(steps):
+            new_r = self.r + (((other_color.r - self.r) * s) / steps)
+            new_g = self.g + (((other_color.g - self.g) * s) / steps)
+            new_b = self.b + (((other_color.b - self.b) * s) / steps)
+            new_a = self.a + (((other_color.a - self.a) * s) / steps)
+            yield self.__class__(new_r, new_g, new_b, new_a)
+    
     def __repr__(self):
         return 'Color(r={}, g={}, b={}, a={})'.format(*self.rgba())
 
