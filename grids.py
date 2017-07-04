@@ -1,6 +1,6 @@
 from math import sqrt
 
-from .shapes import Point
+from .shapes import Point, Line
 
 
 class Grid(object):
@@ -32,6 +32,21 @@ class Grid(object):
     def closest_point_to(self, other_point):
         distance, point = min([(x.distance_to(other_point), x) for x in self.points])
         return point if distance < 0.05 * self.size else other_point
+
+    def radial_sort(self, center):
+        points = list(self.points)
+        return sorted(points, cmp=lambda a, b: cmp(a.distance_to(center), b.distance_to(center)))
+
+    def linear_sort(self, line):
+        points = list(self.points)
+        if line.slope is None:  # vertical line shortcut
+            sorted_points = sorted(points, lambda a, b: cmp(abs(a.x - line.center.x), abs(b.x - line.center.x)))
+        elif line.slope == 0:  # horizontal line shortcut
+            sorted_points = sorted(points, lambda a, b: cmp(abs(a.y - line.center.y), abs(b.y - line.center.y)))
+        else:
+            sorted_points = sorted(points, lambda a, b: cmp(line.distance_to(a), line.distance_to(b)))
+
+        return sorted_points
 
 
 class SquareGrid(Grid):
