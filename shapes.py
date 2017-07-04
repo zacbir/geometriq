@@ -104,6 +104,17 @@ class Shape(object):
 
 class Line(Shape):
 
+    @classmethod
+    def from_origin_with_slope(cls, center, slope):
+        if slope is None:  # vertical line
+            line = cls(Point(center.x, center.y + 1), center=center)
+        elif slope == 0:  # horizontal line
+            line = cls(Point(center.x + 1, center.y), center=center)
+        else:
+            line = cls(Point(center.x + 1, center.y + slope), center=center)
+
+        return line
+            
     def __init__(self, to_point, center=origin):
         super(Line, self).__init__(0, center)
         self.to_point = to_point
@@ -113,6 +124,13 @@ class Line(Shape):
         except ZeroDivisionError:
             self.slope = None
             self.intercept = None
+
+        if self.slope is None:
+            self.inverse_slope = 0
+        elif self.slope == 0:
+            self.inverse_slope = None
+        else:
+            self.inverse_slope = -1 / self.slope
 
     def __repr__(self):
         return "Line({}, center={})".format(self.to_point, self.center)
@@ -132,6 +150,17 @@ class Line(Shape):
     def intersection_with(self, other_line):
         if self.slope == other_line.slope:
             return None  # parallel
+
+        if self.slope is None or other_line.slope is None:  # one line is vertical, the other is not
+            vert = self if self.slope is None else other_line
+            non = self if other_line.slope is None else other_line
+            return Point(vert.center.x, non.slope * vert.center.x + non.intercept)
+
+        if self.slope == 0 or other_line.slope == 0:  # one line is horizontal, the other is not
+            horiz = self if self.slope == 0 else other_line
+            non = self if other_line.slope == 0 else other_line
+            return Point(((horiz.center.y - non.intercept) / non.slope), horiz.center.y)
+            
         x = (other_line.intercept - self.intercept) / (self.slope - other_line.slope)
         y = self.slope * x + self.intercept
         return Point(x, y)
@@ -141,6 +170,10 @@ class Line(Shape):
         new_to_point = self.point_from_center(self.length + random.random() * 0.05 * self.length)
         return self.__class__(new_to_point, new_center)
 
+    def distance_to(self, point):
+        perpendicular = Line.from_origin_with_slope(point, self.inverse_slope)
+        return self.intersection_with(perpendicular).distance_to(point)
+        
     def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         canvas.draw_line(self.center, self.to_point, at_point, rotation, scale_x, scale_y)
 
