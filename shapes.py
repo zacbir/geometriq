@@ -139,6 +139,7 @@ class Line(Shape):
     def length(self):
         return self.center.distance_to(self.to_point)
 
+    @property
     def midpoint(self):
         return Point((self.to_point.x + self.center.x) / 2, (self.to_point.y + self.center.y) / 2)
 
@@ -176,6 +177,34 @@ class Line(Shape):
         
     def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         canvas.draw_line(self.center, self.to_point, at_point, rotation, scale_x, scale_y)
+
+
+class Edge(object):
+
+    def __init__(self, line, opposite_point):
+        self.line = line
+        self.opposite_point = opposite_point
+
+    def __repr__(self):
+        return u'Edge with Line: {}, Opposite: {}'.format(self.line, self.opposite_point)
+
+
+class ArbitraryTriangle(Shape):
+
+    def __init__(self, points):
+        super(ArbitraryTriangle, self).__init__(0)
+        self.points = (self.A, self.B, self.C) = points
+
+        self.AB = Line(self.B, self.A)
+        self.BC = Line(self.C, self.B)
+        self.CA = Line(self.A, self.C)
+
+        self.edges = [Edge(self.AB, self.C),
+                      Edge(self.BC, self.A),
+                      Edge(self.CA, self.B)]
+
+    def __repr__(self):
+        return u'Arbitrary Triangle: {}, {}, {}'.format(self.A, self.B, self.C)
 
 
 class Rectangle(Line):
