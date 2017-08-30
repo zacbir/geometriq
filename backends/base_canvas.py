@@ -39,6 +39,9 @@ class BaseCanvas(object):
     def longest_distance_from(self, point):
         return max([point.distance_to(x) for x in self.corners])
 
+    def point_outside(self, point):
+        return point.x < 0 or point.x > self.width or point.y < 0 or point.y > self.height
+
     def set_stroke_width(self, stroke_width):
         self.stroke_width = stroke_width
 

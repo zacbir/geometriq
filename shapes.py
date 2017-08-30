@@ -105,13 +105,13 @@ class Shape(object):
 class Line(Shape):
 
     @classmethod
-    def from_origin_with_slope(cls, center, slope):
+    def from_origin_with_slope(cls, center, slope, direction=1):
         if slope is None:  # vertical line
-            line = cls(Point(center.x, center.y + 1), center=center)
+            line = cls(Point(center.x, center.y + direction), center=center)
         elif slope == 0:  # horizontal line
-            line = cls(Point(center.x + 1, center.y), center=center)
+            line = cls(Point(center.x + direction, center.y), center=center)
         else:
-            line = cls(Point(center.x + 1, center.y + slope), center=center)
+            line = cls(Point(center.x + direction, center.y + slope), center=center)
 
         return line
             
@@ -134,6 +134,15 @@ class Line(Shape):
 
     def __repr__(self):
         return "Line({}, center={})".format(self.to_point, self.center)
+
+    def __key(self):
+        return self.slope
+
+    def __hash__(self):
+        return hash(self.__key())
+
+    def __eq__(self, other):
+        return self.slope == other.slope
 
     @property
     def length(self):
@@ -171,8 +180,11 @@ class Line(Shape):
         new_to_point = self.point_from_center(self.length + random.random() * 0.05 * self.length)
         return self.__class__(new_to_point, new_center)
 
+    def line_to(self, point):
+        return Line.from_origin_with_slope(point, self.inverse_slope)
+
     def distance_to(self, point):
-        perpendicular = Line.from_origin_with_slope(point, self.inverse_slope)
+        perpendicular = self.line_to(point)
         return self.intersection_with(perpendicular).distance_to(point)
         
     def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
@@ -189,10 +201,9 @@ class Edge(object):
         return u'Edge with Line: {}, Opposite: {}'.format(self.line, self.opposite_point)
 
 
-class ArbitraryTriangle(Shape):
+class ArbitraryTriangle(object):
 
     def __init__(self, points):
-        super(ArbitraryTriangle, self).__init__(0)
         self.points = (self.A, self.B, self.C) = points
 
         self.AB = Line(self.B, self.A)
@@ -203,8 +214,19 @@ class ArbitraryTriangle(Shape):
                       Edge(self.BC, self.A),
                       Edge(self.CA, self.B)]
 
+    @property
+    def center(self):
+        return Point((self.A.x + self.B.x + self.C.x) / 3, (self.A.y + self.B.y + self.C.y) / 3)
+
     def __repr__(self):
         return u'Arbitrary Triangle: {}, {}, {}'.format(self.A, self.B, self.C)
+
+    def area(self):
+        return 0.5 * self.AB.length * self.AB.distance_to(self.C)
+
+    def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+        points_to_draw = filter(None, self.points)
+        canvas.draw_polygon(points_to_draw, at_point, rotation, scale_x, scale_y)
 
 
 class Rectangle(Line):
@@ -284,6 +306,15 @@ class _Triangle(Shape):
 
     def _setup_points(self):
         pass
+
+    @property
+    def edges(self):
+        A, B, C = self.points
+        AB = Line(B, A)
+        BC = Line(C, B)
+        CA = Line(A, C)
+
+        return [Edge(AB, C), Edge(BC, A), Edge(CA, B)]
 
 
 class NorthTriangle(_Triangle):
