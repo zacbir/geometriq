@@ -64,12 +64,16 @@ def call_decorator(f):
 
 class CoreGraphicsCanvas(BaseCanvas):
 
-    def __init__(self, name, width, height=None):
+    def __init__(self, name, width, height=None, debug=False):
         height = height if height else width
         super(CoreGraphicsCanvas, self).__init__(name, width, height)
 
         self.colorSpace = CGColorSpaceCreateDeviceRGB()
         self.context = CGBitmapContextCreate(None, width, height, 8, width * 4, self.colorSpace, kCGImageAlphaPremultipliedLast)
+
+        self.debug = debug
+        self.operation_count = 0
+
         self.log_file = "{}.log".format(self.name)
 
         self.log("canvas = {}({}, {}, {})".format(self.__class__.__name__, repr(name), repr(width), repr(height)))
@@ -113,6 +117,9 @@ class CoreGraphicsCanvas(BaseCanvas):
         r = CGRect((0, 0), (self.width, self.height))
         CGContextAddRect(self.context, r)
         CGContextDrawPath(self.context, kCGPathFillStroke)
+        if self.debug:
+            self.save()
+            self.operation_count += 1
 
     @call_decorator
     def draw_line(self, from_point, to_point, at_point=origin, rotation=0, scale_x=1, scale_y=None):
@@ -122,6 +129,9 @@ class CoreGraphicsCanvas(BaseCanvas):
                     CGContextMoveToPoint(r_t_context, from_point.x, from_point.y)
                     CGContextAddLineToPoint(r_t_context, to_point.x, to_point.y)
                     CGContextDrawPath(r_t_context, kCGPathFillStroke)
+        if self.debug:
+            self.save()
+            self.operation_count += 1
 
     @call_decorator
     def draw_arc(self, radius, angle, center, at_point=origin, rotation=0, scale_x=1, scale_y=None):
@@ -130,6 +140,9 @@ class CoreGraphicsCanvas(BaseCanvas):
                 with ContextRotator(t_context, rotation) as r_t_context:
                     CGContextAddArc(r_t_context, center.x, center.y, radius, 0, radians(angle), 0)
                     CGContextDrawPath(r_t_context, kCGPathFillStroke)
+        if self.debug:
+            self.save()
+            self.operation_count += 1
 
     @call_decorator
     def draw_polygon(self, points, at_point=origin, rotation=0, scale_x=1, scale_y=None):
@@ -144,6 +157,9 @@ class CoreGraphicsCanvas(BaseCanvas):
                     CGContextAddLineToPoint(r_t_context, starting_point.x, starting_point.y)
                     CGContextClosePath(r_t_context)
                     CGContextDrawPath(r_t_context, kCGPathFillStroke)
+        if self.debug:
+            self.save()
+            self.operation_count += 1
 
     @call_decorator
     def draw_circle(self, radius, center,  at_point=origin, rotation=0, scale_x=1, scale_y=None):
@@ -153,6 +169,9 @@ class CoreGraphicsCanvas(BaseCanvas):
                     CGContextAddEllipseInRect(r_t_context,
                                               CGRect((center.x - radius, center.y - radius), (radius * 2, radius * 2)))
                     CGContextDrawPath(r_t_context, kCGPathFillStroke)
+        if self.debug:
+            self.save()
+            self.operation_count += 1
 
     @call_decorator
     def draw_circular_segment(self, radius, angle, center, at_point=origin, rotation=0, scale_x=1, scale_y=None):
@@ -164,11 +183,14 @@ class CoreGraphicsCanvas(BaseCanvas):
                     CGContextAddArc(r_t_context, center.x, center.y, radius, 0, radians(angle), 0)
                     CGContextAddLineToPoint(r_t_context, center.x, center.y)
                     CGContextDrawPath(r_t_context, kCGPathFillStroke)
+        if self.debug:
+            self.save()
+            self.operation_count += 1
 
     @call_decorator
     def save(self):
         image = CGBitmapContextCreateImage(self.context)
-        filename = "{}.png".format(self.name)
+        filename = "{}{}.png".format(self.name, "-{:05}".format(self.operation_count) if self.debug else "")
         url = NSURL.fileURLWithPath_(filename)
         dest = CGImageDestinationCreateWithURL(url, 'public.png', 1, None)
         CGImageDestinationAddImage(dest, image, None)

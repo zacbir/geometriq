@@ -136,7 +136,7 @@ class Line(Shape):
         return "Line({}, center={})".format(self.to_point, self.center)
 
     def __key(self):
-        return self.slope
+        return self.slope, self.length
 
     def __hash__(self):
         return hash(self.__key())
