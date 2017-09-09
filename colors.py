@@ -23,6 +23,9 @@ class Color(object):
 
     def shade(self):
         return self.__class__(self.r, self.g, self.b, random.random() * 0.5)
+        
+    def midtone(self):
+        return self.__class__(self.r, self.g, self.b, random.random() * 0.5 + 0.25)
 
     def tint(self):
         return self.__class__(self.r, self.g, self.b, 1 - random.random() * 0.5)

@@ -1,3 +1,4 @@
+from math import sqrt
 import random
 
 from ..shapes import Point, origin
@@ -32,6 +33,10 @@ class BaseCanvas(object):
     @property
     def corners(self):
         return (origin, Point(0, self.height), Point(self.width, self.height), Point(self.width, 0))
+        
+    @property
+    def diagonal(self):
+        return sqrt(self.width * self.width + self.height * self.height)
     
     def random_point(self):
         return Point(random.random() * self.width, random.random() * self.height)
