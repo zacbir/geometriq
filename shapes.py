@@ -2,6 +2,11 @@ from math import sqrt
 import itertools
 import random
 
+
+def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
+    return abs(a-b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
+
+
 """
 Simple geometric shape models.
 
@@ -175,6 +180,10 @@ class Line(Shape):
         y = self.slope * x + self.intercept
         return Point(x, y)
 
+    def intersects(self, other_line):
+        intersection = self.intersection_with(other_line)
+        return self.contains(intersection)
+
     def extended(self):
         new_center = self.point_from_center(-1 * random.random() * 0.05 * self.length)
         new_to_point = self.point_from_center(self.length + random.random() * 0.05 * self.length)
@@ -189,6 +198,9 @@ class Line(Shape):
         
     def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         canvas.draw_line(self.center, self.to_point, at_point, rotation, scale_x, scale_y)
+
+    def contains(self, point):
+        return point and isclose(self.length, point.distance_to(self.center) + point.distance_to(self.to_point))
 
 
 class Edge(object):
