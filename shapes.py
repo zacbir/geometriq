@@ -316,17 +316,15 @@ class _Triangle(Shape):
 
         self._setup_points()
 
+        self.A, self.B, self.C = self.points
+        self.AB = Line(self.B, self.A)
+        self.BC = Line(self.C, self.B)
+        self.CA = Line(self.A, self.C)
+
+        self.edges = [Edge(self.AB, self.C), Edge(self.BC, self.A), Edge(self.CA, self.B)]
+
     def _setup_points(self):
         pass
-
-    @property
-    def edges(self):
-        A, B, C = self.points
-        AB = Line(B, A)
-        BC = Line(C, B)
-        CA = Line(A, C)
-
-        return [Edge(AB, C), Edge(BC, A), Edge(CA, B)]
 
 
 class NorthTriangle(_Triangle):
