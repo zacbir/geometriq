@@ -134,6 +134,21 @@ class CoreGraphicsCanvas(BaseCanvas):
             self.operation_count += 1
 
     @call_decorator
+    def draw_curve(self, from_point, to_point, from_control_point, to_control_point=None, at_point=origin,
+                   rotation=0, scale_x=1, scale_y=None):
+        with ContextScalor(self.context, scale_x, scale_y) as s_context:
+            with ContextTranslator(s_context, at_point) as t_context:
+                with ContextRotator(t_context, rotation) as r_t_context:
+                    CGContextMoveToPoint(r_t_context, from_point.x, from_point.y)
+                    if to_control_point:
+                        CGContextAddCurveToPoint(r_t_context, from_control_point.x, from_control_point.y,
+                                                 to_control_point.x, to_control_point.y, to_point.x, to_point.y)
+                    else:
+                        CGContextAddQuadCurveToPoint(r_t_context, from_control_point.x, from_control_point.y,
+                                                     to_point.x, to_point.y)
+                    CGContextDrawPath(r_t_context, kCGPathFillStroke)
+
+    @call_decorator
     def draw_arc(self, radius, angle, center, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         with ContextScalor(self.context, scale_x, scale_y) as s_context:
             with ContextTranslator(s_context, at_point) as t_context:

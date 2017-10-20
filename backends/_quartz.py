@@ -69,9 +69,13 @@ quartz.CGColorSpaceCreateWithName.argtypes = [c_void_p]
 
 quartz.CGContextAddArc.argtypes = [c_void_p, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, c_int]
 
+quartz.CGContextAddCurveToPoint.argtypes = [c_void_p, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat]
+
 quartz.CGContextAddEllipseInRect.argtypes = [c_void_p, CGRect]  # Double check
 
 quartz.CGContextAddLineToPoint.argtypes = [c_void_p, CGFloat, CGFloat]
+
+quartz.CGContextAddQuadCurveToPoint.argtypes = [c_void_p, CGFloat, CGFloat, CGFloat, CGFloat]
 
 quartz.CGContextAddRect.argtypes = [c_void_p, CGRect]  # Double check
 

@@ -12,6 +12,7 @@ class ReferenceImage(object):
     data_provider_func = {
         '.png': CGImageCreateWithPNGDataProvider,
         '.jpg': CGImageCreateWithJPEGDataProvider,
+        '.JPG': CGImageCreateWithJPEGDataProvider,
         '.jpeg': CGImageCreateWithJPEGDataProvider,
     }
 
@@ -39,8 +40,8 @@ class ReferenceImage(object):
         """
         from_width, from_height = float(self.canvas.width), float(self.canvas.height)
         to_width, to_height = float(self.width), float(self.height)
-        from_aspect = from_width / from_height
-        to_aspect = to_width / to_height
+        from_aspect = float(from_width) / from_height
+        to_aspect = float(to_width) / to_height
         return Point(point.x * (to_width / from_width), point.y * (to_height / from_height))
 
     def color_at_point(self, point):
