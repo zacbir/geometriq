@@ -65,6 +65,8 @@ backgrounds = [base03, base02, base2, base3]
 
 strokes = [base01, base00, base0, base1]
 
+greys = [base03, base02, base01, base00, base0, base1, base2, base3]
+
 fills = [magenta, red, orange, yellow, green, cyan, blue, violet]
 
 warms = [magenta, red, orange, yellow]
