@@ -54,4 +54,7 @@ class Color(object):
         return 'Color(r={}, g={}, b={}, a={})'.format(*self.rgba())
 
 
+black = Color(0, 0, 0, 1)
 clear = Color(0, 0, 0, 0)
+white = Color(1, 1, 1, 1)
+
