@@ -263,6 +263,17 @@ class Arc(Shape):
         canvas.draw_arc(self.size, self.angle, self.center, at_point, rotation, scale_x, scale_y)
 
 
+class Curve(Shape):
+
+    def __init__(self, points, control_points, center=origin):
+        super(Curve, self).__init__(0, center)
+        self.points = points
+        self.control_points = control_points
+
+    def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+        canvas.draw_curve(self.points, self.control_points, at_point, rotation, scale_x, scale_y)
+
+
 class QuarterCircle(Arc):
 
     def __init__(self, size, center=origin):

@@ -134,19 +134,23 @@ class CoreGraphicsCanvas(BaseCanvas):
             self.operation_count += 1
 
     @call_decorator
-    def draw_curve(self, from_point, to_point, from_control_point, to_control_point=None, at_point=origin,
-                   rotation=0, scale_x=1, scale_y=None):
+    def draw_curve(self, points, control_points, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         with ContextScalor(self.context, scale_x, scale_y) as s_context:
             with ContextTranslator(s_context, at_point) as t_context:
                 with ContextRotator(t_context, rotation) as r_t_context:
-                    CGContextMoveToPoint(r_t_context, from_point.x, from_point.y)
-                    if to_control_point:
-                        CGContextAddCurveToPoint(r_t_context, from_control_point.x, from_control_point.y,
-                                                 to_control_point.x, to_control_point.y, to_point.x, to_point.y)
-                    else:
-                        CGContextAddQuadCurveToPoint(r_t_context, from_control_point.x, from_control_point.y,
-                                                     to_point.x, to_point.y)
+                    CGContextMoveToPoint(r_t_context, points[0].x, points[0].y)
+                    point_pairs = zip(points[:-1], points[1:])
+                    control_point_pairs = zip(control_points[:-1], control_points[1:])
+                    for i, (start, end) in enumerate(point_pairs):
+                        cp1, cp2 = control_point_pairs[i]
+                        if cp2:
+                            CGContextAddCurveToPoint(r_t_context, cp1.x, cp1.y, cp2.x, cp2.y, end.x, end.y)
+                        else:
+                            CGContextAddQuadCurveToPoint(r_t_context, cp1.x, cp1.y, end.x, end.y)
                     CGContextDrawPath(r_t_context, kCGPathFillStroke)
+        if self.debug:
+            self.save()
+            self.operation_count += 1
 
     @call_decorator
     def draw_arc(self, radius, angle, center, at_point=origin, rotation=0, scale_x=1, scale_y=None):
