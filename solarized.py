@@ -74,3 +74,14 @@ warms = [magenta, red, orange, yellow]
 cools = [green, cyan, blue, violet]
 
 contrast = [(base03, base1), (base3, base01)]
+
+
+def gradient(palette=fills + [magenta], steps=27):
+    if steps % len(palette) != 0:
+        raise ValueError("Steps can't be evenly divided by the length of the palette!")
+
+    individual_steps = steps / len(palette)
+
+    for start, end in zip(palette[:-1], palette[1:]):
+        for color in start.gradient_to(end, individual_steps):
+            yield color

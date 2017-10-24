@@ -134,13 +134,16 @@ class CoreGraphicsCanvas(BaseCanvas):
             self.operation_count += 1
 
     @call_decorator
-    def draw_curve(self, points, control_points, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+    def draw_curve(self, points, control_points, control_points_cubic=None, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         with ContextScalor(self.context, scale_x, scale_y) as s_context:
             with ContextTranslator(s_context, at_point) as t_context:
                 with ContextRotator(t_context, rotation) as r_t_context:
                     CGContextMoveToPoint(r_t_context, points[0].x, points[0].y)
                     point_pairs = zip(points[:-1], points[1:])
-                    control_point_pairs = zip(control_points[:-1], control_points[1:])
+                    if control_points_cubic:
+                        control_point_pairs = zip(control_points, control_points_cubic)
+                    else:
+                        control_point_pairs = zip(control_points, [None for x in range(len(control_points))])
                     for i, (start, end) in enumerate(point_pairs):
                         cp1, cp2 = control_point_pairs[i]
                         if cp2:
