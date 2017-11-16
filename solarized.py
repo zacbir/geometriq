@@ -22,26 +22,26 @@ green     #859900  2/2 green     64 #5f8700 60 -20  65 133 153   0  68 100  60
 """
 
 
-def gen_color(r, g, b):
-    return Color(r / 255.0, g / 255.0, b / 255.0)
+def gen_color(r, g, b, name=None):
+    return Color(r / 255.0, g / 255.0, b / 255.0, name=name)
 
 
-base03 = gen_color(0, 43, 54)
-base02 = gen_color(7, 54, 66)
-base01 = gen_color(88, 110, 117)
-base00 = gen_color(101, 123, 131)
-base0 = gen_color(131, 148, 150)
-base1 = gen_color(147, 161, 161)
-base2 = gen_color(238, 232, 213)
-base3 = gen_color(253, 246, 227)
-yellow = gen_color(181, 137, 0)
-orange = gen_color(203, 75, 22)
-red = gen_color(220, 50, 47)
-magenta = gen_color(211, 54, 130)
-violet = gen_color(108, 113, 196)
-blue = gen_color(38, 139, 210)
-cyan = gen_color(42, 161, 152)
-green = gen_color(133, 153, 0)
+base03 = gen_color(0, 43, 54, 'base03')
+base02 = gen_color(7, 54, 66, 'base02')
+base01 = gen_color(88, 110, 117, 'base01')
+base00 = gen_color(101, 123, 131, 'base00')
+base0 = gen_color(131, 148, 150, 'base0')
+base1 = gen_color(147, 161, 161, 'base1')
+base2 = gen_color(238, 232, 213, 'base2')
+base3 = gen_color(253, 246, 227, 'base3')
+yellow = gen_color(181, 137, 0, 'yellow')
+orange = gen_color(203, 75, 22, 'orange')
+red = gen_color(220, 50, 47, 'red')
+magenta = gen_color(211, 54, 130, 'magenta')
+violet = gen_color(108, 113, 196, 'violet')
+blue = gen_color(38, 139, 210, 'blue')
+cyan = gen_color(42, 161, 152, 'cyan')
+green = gen_color(133, 153, 0, 'green')
 
 solarized = [base03,
              base02,
@@ -77,11 +77,13 @@ contrast = [(base03, base1), (base3, base01)]
 
 
 def gradient(palette=fills + [magenta], steps=27):
-    if steps % len(palette) != 0:
+    if 0 and steps % len(palette) != 0:
         raise ValueError("Steps can't be evenly divided by the length of the palette!")
 
     individual_steps = steps / len(palette)
 
     for start, end in zip(palette[:-1], palette[1:]):
-        for color in start.gradient_to(end, individual_steps):
+        print "Starting with a new start: {} and end: {}".format(start.name, end.name)
+        for color in start.gradient_to(end, individual_steps - 1):
+            print color.name
             yield color

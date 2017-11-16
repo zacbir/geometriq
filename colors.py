@@ -8,11 +8,17 @@ class Color(object):
     def from_full_value(cls, r, g, b, a=255):
         return cls(r/255.0, g/255.0, b/255.0, a/255.0)
 
-    def __init__(self, r, g, b, a=1.0):
+    def __init__(self, r, g, b, a=1.0, name=None):
         self.r = r
         self.g = g
         self.b = b
         self.a = a
+
+        self._name = name
+
+    @property
+    def name(self):
+        return self._name if self._name is not None else repr(self)
 
     def rgba(self, a=None):
         alpha = a if a is not None else self.a
