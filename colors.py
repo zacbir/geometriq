@@ -59,6 +59,16 @@ class Color(object):
     def __repr__(self):
         return 'Color(r={}, g={}, b={}, a={})'.format(*self.rgba())
 
+    def naive_greyscale(self):
+        g = (self.r + self.g + self.b) / 3.0
+        return self.__class__(g, g, g, self.a)
+
+    def colorimetric_greyscale(self):
+        g = self.r * 0.299 + self.g * 0.587 + self.b * 0.114
+        return self.__class__(g, g, g, self.a)
+
+    greyscale = colorimetric_greyscale
+
 
 black = Color(0, 0, 0, 1)
 clear = Color(0, 0, 0, 0)

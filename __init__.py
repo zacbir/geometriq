@@ -1,14 +1,12 @@
-import random
-
 from .backends import *
 from .colors import *
 from .grids import *
-try:
-	from .reference_image import *
-except ImportError:
-	pass
 from .shapes import *
 from .solarized import *
+try:
+    from .reference_image import *
+except ImportError:
+    pass
 
 
 def band(iterable, value, upper_bounds, lower_bounds=0, fuzz=False):
