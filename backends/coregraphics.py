@@ -1,7 +1,7 @@
 from math import radians
 
 from .quartz import *
-from .base_canvas import BaseCanvas
+from .base_canvas import BaseCanvas, log_on_call
 
 from ..shapes import origin
 
@@ -49,19 +49,6 @@ class ContextScalor:
         CGContextScaleCTM(self.context, 1 / self.scale_x, 1 / self.scale_y)
 
 
-def call_decorator(f):
-
-    def log_and_call(*args, **kw):
-        # args_join = ", ".join([repr(x) for x in args[1:]])
-        # kw_join = ", ".join(['{}={}'.format(repr(k), repr(v)) for (k, v) in kw.items()])
-
-        # args[0].log("canvas.{}({}{})".format(f.__name__, args_join, ", {}".format(kw_join) if kw_join else ""))
-
-        return f(*args, **kw)
-
-    return log_and_call
-
-
 class CoreGraphicsCanvas(BaseCanvas):
 
     def __init__(self, name, width, height=None, debug=False):
@@ -74,45 +61,37 @@ class CoreGraphicsCanvas(BaseCanvas):
         self.debug = debug
         self.operation_count = 0
 
-        self.log_file = "{}.log".format(self.name)
-
-        self.log("canvas = {}({}, {}, {})".format(self.__class__.__name__, repr(name), repr(width), repr(height)))
-
-    def log(self, msg):
-        with open(self.log_file, 'a+') as log:
-            log.write("{}\n".format(msg))
-
-    @call_decorator
+    @log_on_call
     def set_line_join(self, join_style):
         self.join_style = join_style
         CGContextSetLineJoin(self.context, self.join_style)
 
-    @call_decorator
+    @log_on_call
     def set_line_cap(self, cap_style):
         self.cap_style = cap_style
         CGContextSetLineCap(self.context, self.cap_style)
 
-    @call_decorator
+    @log_on_call
     def set_miter_limit(self, miter_limit):
         self.miter_limit = miter_limit
         CGContextSetMiterLimit(self.context, self.miter_limit)
 
-    @call_decorator
+    @log_on_call
     def set_stroke_width(self, stroke_width):
         self.stroke_width = stroke_width
         CGContextSetLineWidth(self.context, self.stroke_width)
 
-    @call_decorator
+    @log_on_call
     def set_stroke_color(self, stroke_color):
         self.stroke_color = stroke_color
         CGContextSetRGBStrokeColor(self.context, *self.stroke_color.rgba())
 
-    @call_decorator
+    @log_on_call
     def set_fill_color(self, fill_color):
         self.fill_color = fill_color
         CGContextSetRGBFillColor(self.context, *self.fill_color.rgba())
 
-    @call_decorator
+    @log_on_call
     def fill_background(self):
         r = CGRect((0, 0), (self.width, self.height))
         CGContextAddRect(self.context, r)
@@ -121,7 +100,7 @@ class CoreGraphicsCanvas(BaseCanvas):
             self.save()
             self.operation_count += 1
 
-    @call_decorator
+    @log_on_call
     def draw_line(self, from_point, to_point, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         with ContextScalor(self.context, scale_x, scale_y) as s_context:
             with ContextTranslator(s_context, at_point) as t_context:
@@ -133,7 +112,7 @@ class CoreGraphicsCanvas(BaseCanvas):
             self.save()
             self.operation_count += 1
 
-    @call_decorator
+    @log_on_call
     def draw_curve(self, points, control_points, control_points_cubic=None, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         with ContextScalor(self.context, scale_x, scale_y) as s_context:
             with ContextTranslator(s_context, at_point) as t_context:
@@ -155,7 +134,7 @@ class CoreGraphicsCanvas(BaseCanvas):
             self.save()
             self.operation_count += 1
 
-    @call_decorator
+    @log_on_call
     def draw_arc(self, radius, angle, center, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         with ContextScalor(self.context, scale_x, scale_y) as s_context:
             with ContextTranslator(s_context, at_point) as t_context:
@@ -166,9 +145,9 @@ class CoreGraphicsCanvas(BaseCanvas):
             self.save()
             self.operation_count += 1
 
-    @call_decorator
+    @log_on_call
     def draw_polygon(self, points, at_point=origin, rotation=0, scale_x=1, scale_y=None):
-        drawn_points = points[:]
+        drawn_points = list(points)
         with ContextScalor(self.context, scale_x, scale_y) as s_context:
             with ContextTranslator(s_context, at_point) as t_context:
                 with ContextRotator(t_context, rotation) as r_t_context:
@@ -183,7 +162,7 @@ class CoreGraphicsCanvas(BaseCanvas):
             self.save()
             self.operation_count += 1
 
-    @call_decorator
+    @log_on_call
     def draw_circle(self, radius, center,  at_point=origin, rotation=0, scale_x=1, scale_y=None):
         with ContextScalor(self.context, scale_x, scale_y) as s_context:
             with ContextTranslator(s_context, at_point) as t_context:
@@ -195,7 +174,7 @@ class CoreGraphicsCanvas(BaseCanvas):
             self.save()
             self.operation_count += 1
 
-    @call_decorator
+    @log_on_call
     def draw_circular_segment(self, radius, angle, center, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         with ContextScalor(self.context, scale_x, scale_y) as s_context:
             with ContextTranslator(s_context, at_point) as t_context:
@@ -209,7 +188,7 @@ class CoreGraphicsCanvas(BaseCanvas):
             self.save()
             self.operation_count += 1
 
-    @call_decorator
+    @log_on_call
     def save(self):
         image = CGBitmapContextCreateImage(self.context)
         filename = "{}{}.png".format(self.name, "-{:05}".format(self.operation_count) if self.debug else "")

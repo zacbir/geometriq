@@ -4,6 +4,19 @@ import random
 from ..shapes import Point, origin
 
 
+def log_on_call(f):
+
+    def log_and_call(*args, **kw):
+        args_join = ", ".join([repr(x) for x in args[1:]])
+        kw_join = ", ".join(['{}={}'.format(repr(k), repr(v)) for (k, v) in kw.items()])
+
+        args[0].log("canvas.{}({}{})".format(f.__name__, args_join, ", {}".format(kw_join) if kw_join else ""))
+
+        return f(*args, **kw)
+
+    return log_and_call
+
+
 class BaseCanvas(object):
     """ An abstract canvas API providing a means to draw shapes on itself
 
@@ -25,6 +38,12 @@ class BaseCanvas(object):
         self.stroke_width = None
         self.stroke_color = None
         self.fill_color = None
+        self.log_file = "{}.log".format(self.name)
+        self.log("canvas = {}({}, {}, {})".format(self.__class__.__name__, repr(name), repr(width), repr(height)))
+
+    def log(self, msg):
+        with open(self.log_file, 'a+') as log:
+            log.write("{}\n".format(msg))
 
     @property
     def center(self):
@@ -47,32 +66,58 @@ class BaseCanvas(object):
     def point_outside(self, point):
         return point.x < 0 or point.x > self.width or point.y < 0 or point.y > self.height
 
+    @log_on_call
+    def set_line_join(self, join_style):
+        self.join_style = join_style
+
+    @log_on_call
+    def set_line_cap(self, cap_style):
+        self.cap_style = cap_style
+
+    @log_on_call
+    def set_miter_limit(self, miter_limit):
+        self.miter_limit = miter_limit
+
+    @log_on_call
     def set_stroke_width(self, stroke_width):
         self.stroke_width = stroke_width
 
+    @log_on_call
     def set_stroke_color(self, stroke_color):
         self.stroke_color = stroke_color
 
+    @log_on_call
     def set_fill_color(self, fill_color):
         self.fill_color = fill_color
 
+    @log_on_call
     def fill_background(self):
         pass
 
-    def draw_line(self, from_point, to_point, at_point, rotation):
+    @log_on_call
+    def draw_line(self, from_point, to_point, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         pass
 
-    def draw_polygon(self, points, at_point, rotation):
+    @log_on_call
+    def draw_curve(self, points, control_points, control_points_cubic=None, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         pass
 
-    def draw_circle(self, radius, at_point, rotation):
+    @log_on_call
+    def draw_arc(self, radius, angle, center, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         pass
 
-    def draw_quarter_circle(self, radius, at_point, rotation):
+    @log_on_call
+    def draw_polygon(self, points, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         pass
 
-    def draw_half_circle(self, radius, at_point, rotation):
+    @log_on_call
+    def draw_circle(self, radius, center,  at_point=origin, rotation=0, scale_x=1, scale_y=None):
         pass
 
+    @log_on_call
+    def draw_circular_segment(self, radius, angle, center, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+        pass
+
+    @log_on_call
     def save(self):
         pass
