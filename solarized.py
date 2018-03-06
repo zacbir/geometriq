@@ -83,7 +83,5 @@ def gradient(palette=fills + [magenta], steps=27):
     individual_steps = steps / len(palette)
 
     for start, end in zip(palette[:-1], palette[1:]):
-        print "Starting with a new start: {} and end: {}".format(start.name, end.name)
         for color in start.gradient_to(end, individual_steps - 1):
-            print color.name
             yield color
