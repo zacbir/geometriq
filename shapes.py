@@ -56,13 +56,13 @@ class Point(object):
 
     def __gt__(self, other):
         return self.x > other.x and self.y > other.y
-    
+
     def __ge__(self, other):
         return self.x >= other.x and self.y >= other.y
-    
+
     def __lt__(self, other):
         return self.x < other.x and self.y < other.y
-    
+
     def __le__(self, other):
         return self.x <= other.x and self.y <= other.y
 
@@ -119,7 +119,7 @@ class Line(Shape):
             line = cls(Point(center.x + direction, center.y + slope), center=center)
 
         return line
-            
+
     def __init__(self, to_point, center=origin):
         super(Line, self).__init__(0, center)
         self.to_point = to_point
@@ -161,7 +161,7 @@ class Line(Shape):
         ratio = float(distance) / self.length
         return Point(((1 - ratio) * self.center.x) + (ratio * self.to_point.x),
                      ((1 - ratio) * self.center.y) + (ratio * self.to_point.y))
-    
+
     def intersection_with(self, other_line):
         if self.slope == other_line.slope:
             return None  # parallel
@@ -175,7 +175,7 @@ class Line(Shape):
             horiz = self if self.slope == 0 else other_line
             non = self if other_line.slope == 0 else other_line
             return Point(((horiz.center.y - non.intercept) / non.slope), horiz.center.y)
-            
+
         x = (other_line.intercept - self.intercept) / (self.slope - other_line.slope)
         y = self.slope * x + self.intercept
         return Point(x, y)
@@ -195,12 +195,13 @@ class Line(Shape):
     def distance_to(self, point):
         perpendicular = self.line_to(point)
         return self.intersection_with(perpendicular).distance_to(point)
-        
+
     def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         canvas.draw_line(self.center, self.to_point, at_point, rotation, scale_x, scale_y)
 
     def contains(self, point):
-        return point and isclose(self.length, point.distance_to(self.center) + point.distance_to(self.to_point))
+        return point and isclose(self.intercept,
+                                 (point.y - self.slope * point.x))
 
 
 class Edge(object):
@@ -242,7 +243,7 @@ class ArbitraryTriangle(object):
 
 
 class Rectangle(Line):
-    
+
     def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         points = [
             self.center,
@@ -254,11 +255,11 @@ class Rectangle(Line):
 
 
 class Arc(Shape):
-    
+
     def __init__(self, size, angle, center=origin):
         super(Arc, self).__init__(size, center)
         self.angle = angle
-    
+
     def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         canvas.draw_arc(self.size, self.angle, self.center, at_point, rotation, scale_x, scale_y)
 
@@ -313,6 +314,20 @@ class Circle(Shape):
 
     def __init__(self, size, center=origin):
         super(Circle, self).__init__(size, center)
+
+    def intersections_with_line(self, line):
+        # line: y = mx + b
+        # circle: (x - self.center.x)^2 + (y - self.center.y)^2 = self.size^2
+
+        if line.slope == 0:
+            # special case - when m == 0 (horizontal line):
+            # intercepts: x = sqrt(self.size^2 - (b - self.center.y)^2)
+            try:
+                x = sqrt(self.size**2 - (line.intercept - self.center.y)**2)
+            except ValueError:
+                # Outside the circle, return None
+                return None
+        return (Point(-1 * x + self.center.x, line.intercept), Point(x + self.center.x, line.intercept))
 
     def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         canvas.draw_circle(self.size, self.center, at_point, rotation, scale_x, scale_y)
