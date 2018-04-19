@@ -324,10 +324,21 @@ class Circle(Shape):
             # intercepts: x = sqrt(self.size^2 - (b - self.center.y)^2)
             try:
                 x = sqrt(self.size**2 - (line.intercept - self.center.y)**2)
+                return (Point(-1 * x + self.center.x, line.intercept), Point(x + self.center.x, line.intercept))
             except ValueError:
                 # Outside the circle, return None
                 return None
-        return (Point(-1 * x + self.center.x, line.intercept), Point(x + self.center.x, line.intercept))
+        elif line.slope is None:
+            # special case - when m is None (vertical line):
+            # intercepts: y = sqrt(self.size^2 - line.center.x^2)
+            try:
+                y = sqrt(self.size**2 - (line.center.x - self.center.x)**2)
+                return (Point(line.center.x, (self.center.y - y)), Point(line.center.x, (self.center.y + y)))
+            except ValueError:
+                # Outside the circle, return None
+                return None
+        else:
+            return None
 
     def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         canvas.draw_circle(self.size, self.center, at_point, rotation, scale_x, scale_y)
