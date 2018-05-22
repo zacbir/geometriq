@@ -18,5 +18,9 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ),
+    install_requires=[
+        'click >= 6.0',
+        'pyobjc;platform_system=="Darwin"',
+
 )
 
