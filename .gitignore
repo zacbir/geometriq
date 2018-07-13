@@ -90,5 +90,5 @@ ENV/
 
 .envrc
 .vscode/
-geometer_scripts/
+geometer_scripts
 output/
