@@ -87,3 +87,8 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+.envrc
+.vscode/
+geometer_scripts/
+output/

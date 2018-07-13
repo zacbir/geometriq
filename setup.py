@@ -21,6 +21,9 @@ setuptools.setup(
     install_requires=[
         'click >= 6.0',
         'pyobjc;platform_system=="Darwin"',
-
+    ],
+    entry_points='''
+        [console_scripts]
+        geometer=geometer.scripts:geometer_cli
+    ''',    
 )
-
