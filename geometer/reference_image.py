@@ -18,7 +18,7 @@ class ReferenceImage(object):
 
     def __init__(self, image_path, canvas):
         self.canvas = canvas
-        data_provider = CGDataProviderCreateWithFilename(os.path.expanduser(image_path))
+        data_provider = CGDataProviderCreateWithFilename(bytes(os.path.expanduser(image_path).encode('utf-8')))
         ext = os.path.splitext(image_path)[-1].lower()
         image_func = self.data_provider_func[ext]
         self.image = image_func(data_provider, None, False, kCGRenderingIntentDefault)

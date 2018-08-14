@@ -14,8 +14,20 @@ from geometer import *
 @click.argument('height', type=int)
 @click.option('--geometer-directory', help='directory where geometer scripts can be found', type=click.Path(exists=True, file_okay=False, dir_okay=True), envvar='GEOMETER_DIRECTORY')
 @click.option('--output-dir', help='directory where resulting images should be saved', type=click.Path(exists=True, file_okay=False, dir_okay=True), envvar='GEOMETER_OUTPUT_DIRECTORY')
-@click.option('--contrast', '-c', help='contrast theme', type=click.Choice(['dark', 'light']), default='light')
+@click.option('--contrast', '-c', help='contrast theme', type=click.Choice(['dark', 'light', 'clear']), default='light')
 def geometer_cli(geometer_script, width, height, geometer_directory, output_dir, contrast):
+
+    background_fills = {
+        'dark': base03,
+        'light': base3,
+        'clear': clear
+    }
+
+    strokes = {
+        'dark': base1,
+        'light': base01,
+        'clear': base01
+    }
 
     DEBUG = os.getenv('GEOMETER_DEBUG', False)
 
@@ -35,11 +47,11 @@ def geometer_cli(geometer_script, width, height, geometer_directory, output_dir,
     canvas.set_line_join(kCGLineJoinMiter)
     canvas.set_stroke_color(clear)
     canvas.set_stroke_width(4)
-    canvas.set_fill_color(base3 if contrast == "light" else base03)
+    canvas.set_fill_color(background_fills[contrast])
     
     canvas.fill_background()
     
-    canvas.set_stroke_color(base01 if contrast == "light" else base1)
+    canvas.set_stroke_color(strokes[contrast])
     canvas.set_fill_color(clear)
     
     try:
