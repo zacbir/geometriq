@@ -17,6 +17,48 @@ def log_on_call(f):
     return log_and_call
 
 
+class StrokeWidthContext:
+
+    def __init__(self, canvas, stroke_width):
+        self.canvas = canvas
+        self.old_width = canvas.stroke_width
+        self.new_width = stroke_width
+
+    def __enter__(self):
+        self.canvas.set_stroke_width(self.new_width)
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.canvas.set_stroke_width(self.old_width)
+
+
+class StrokeColorContext:
+
+    def __init__(self, canvas, stroke_color):
+        self.canvas = canvas
+        self.old_color = canvas.stroke_color
+        self.new_color = stroke_color
+
+    def __enter__(self):
+        self.canvas.set_stroke_color(self.new_color)
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.canvas.set_stroke_color(self.old_color)
+
+
+class FillColorContext:
+
+    def __init__(self, canvas, fill_color):
+        self.canvas = canvas
+        self.old_color = canvas.fill_color
+        self.new_color = fill_color
+    
+    def __enter__(self):
+        self.canvas.set_fill_color(self.new_color)
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.canvas.set_fill_color(self.old_color)
+
+
 class Canvas(object):
     """ An abstract canvas API providing a means to draw shapes on itself
 
