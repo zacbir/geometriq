@@ -1,9 +1,9 @@
 import canvas as pythonista_canvas
 
-from .base_canvas import BaseCanvas
+from ..canvas import Canvas
 
 
-class PythonistaCanvas(BaseCanvas):
+class PythonistaCanvas(Canvas):
     def __init__(self, name, width, height):
         super(PythonistaCanvas, self).__init__(name, width, height)
         self.canvas = pythonista_canvas

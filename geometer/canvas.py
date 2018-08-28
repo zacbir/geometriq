@@ -1,7 +1,7 @@
 from math import sqrt
 import random
 
-from ..shapes import Point, origin
+from .shapes import Point, origin
 
 
 def log_on_call(f):
@@ -17,7 +17,7 @@ def log_on_call(f):
     return log_and_call
 
 
-class BaseCanvas(object):
+class Canvas(object):
     """ An abstract canvas API providing a means to draw shapes on itself
 
     It is specified as a 2-dimensional area, with a width and a height.
@@ -108,6 +108,10 @@ class BaseCanvas(object):
 
     @log_on_call
     def draw_polygon(self, points, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+        pass
+
+    @log_on_call
+    def draw_polycurves(self, curves, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         pass
 
     @log_on_call

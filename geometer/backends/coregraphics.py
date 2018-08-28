@@ -1,7 +1,7 @@
 from math import radians
 
 from .quartz import *
-from .base_canvas import BaseCanvas, log_on_call
+from ..canvas import Canvas, log_on_call
 
 from ..shapes import origin
 
@@ -49,7 +49,7 @@ class ContextScalor:
         CGContextScaleCTM(self.context, 1 / self.scale_x, 1 / self.scale_y)
 
 
-class CoreGraphicsCanvas(BaseCanvas):
+class CoreGraphicsCanvas(Canvas):
 
     def __init__(self, name, width, height=None, debug=False):
         height = height if height else width
@@ -161,6 +161,10 @@ class CoreGraphicsCanvas(BaseCanvas):
         if self.debug:
             self.save()
             self.operation_count += 1
+
+    @log_on_call
+    def draw_polycurves(self, curves, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+        pass
 
     @log_on_call
     def draw_circle(self, radius, center,  at_point=origin, rotation=0, scale_x=1, scale_y=None):

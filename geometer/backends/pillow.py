@@ -2,11 +2,11 @@ from datetime import datetime
 
 from PIL import Image, ImageDraw
 
-from .base_canvas import BaseCanvas
+from ..canvas import Canvas
 from ..shapes import Point
 
 
-class PillowCanvas(BaseCanvas):
+class PillowCanvas(Canvas):
     def __init__(self, name, width, height):
         super(PillowCanvas, self).__init__(name, width, height)
 

@@ -14,18 +14,22 @@ from geometer import *
 @click.argument('height', type=int)
 @click.option('--geometer-directory', help='directory where geometer scripts can be found', type=click.Path(exists=True, file_okay=False, dir_okay=True), envvar='GEOMETER_DIRECTORY')
 @click.option('--output-dir', help='directory where resulting images should be saved', type=click.Path(exists=True, file_okay=False, dir_okay=True), envvar='GEOMETER_OUTPUT_DIRECTORY')
-@click.option('--contrast', '-c', help='contrast theme', type=click.Choice(['dark', 'light', 'clear']), default='light')
+@click.option('--contrast', '-c', help='contrast theme', type=click.Choice(['dark', 'light', 'black', 'white', 'clear']), default='light')
 def geometer_cli(geometer_script, width, height, geometer_directory, output_dir, contrast):
 
     background_fills = {
         'dark': base03,
         'light': base3,
+        'black': black,
+        'white': white,
         'clear': clear
     }
 
     strokes = {
         'dark': base1,
         'light': base01,
+        'black': white,
+        'white': black,
         'clear': base01
     }
 

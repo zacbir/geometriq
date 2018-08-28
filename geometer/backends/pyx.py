@@ -1,9 +1,9 @@
 import pyx
 
-from .base_canvas import BaseCanvas
+from ..canvas import Canvas
 
 
-class PyxCanvas(BaseCanvas):
+class PyxCanvas(Canvas):
 
     def __init__(self, name, width, height):
         super(PyxCanvas, self).__init__(name, width, height)
