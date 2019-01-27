@@ -1,6 +1,6 @@
-# Geometer
+# Geometriq
 
-Geometer is an extensible library for creating 2D geometrical art.
+Geometriq is an extensible library for creating 2D geometrical art.
 
 It provides a single, unified API for creating a variety of shapes
 and transforms, and abstracts away the implementation details of

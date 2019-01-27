@@ -5,17 +5,17 @@ import sys
 
 import click
 
-from geometer import *
+from geometriq import *
 
 
 @click.command()
-@click.argument('geometer-script')
+@click.argument('geometriq-script')
 @click.argument('width', type=int)
 @click.argument('height', type=int)
-@click.option('--geometer-directory', help='directory where geometer scripts can be found', type=click.Path(exists=True, file_okay=False, dir_okay=True), envvar='GEOMETER_DIRECTORY')
-@click.option('--output-dir', help='directory where resulting images should be saved', type=click.Path(exists=True, file_okay=False, dir_okay=True), envvar='GEOMETER_OUTPUT_DIRECTORY')
+@click.option('--geometriq-directory', help='directory where geometriq scripts can be found', type=click.Path(exists=True, file_okay=False, dir_okay=True), envvar='GEOMETRIQ_DIRECTORY')
+@click.option('--output-dir', help='directory where resulting images should be saved', type=click.Path(exists=True, file_okay=False, dir_okay=True), envvar='GEOMETRIQ_OUTPUT_DIRECTORY')
 @click.option('--contrast', '-c', help='contrast theme', type=click.Choice(['dark', 'light', 'black', 'white', 'clear']), default='light')
-def geometer_cli(geometer_script, width, height, geometer_directory, output_dir, contrast):
+def geometriq_cli(geometriq_script, width, height, geometriq_directory, output_dir, contrast):
 
     background_fills = {
         'dark': base03,
@@ -33,11 +33,11 @@ def geometer_cli(geometer_script, width, height, geometer_directory, output_dir,
         'clear': base01
     }
 
-    DEBUG = os.getenv('GEOMETER_DEBUG', False)
+    DEBUG = os.getenv('GEOMETRIQ_DEBUG', False)
 
-    sys.path.append(geometer_directory)
+    sys.path.append(geometriq_directory)
 
-    script_name = os.path.splitext(os.path.basename(geometer_script))[0]
+    script_name = os.path.splitext(os.path.basename(geometriq_script))[0]
     dated_name = "{}_{}x{}_{}".format(script_name, width, height, datetime.now().strftime('%Y-%m-%d-%H:%M:%S'))
 
     script = __import__('{}'.format(script_name), globals(), locals(), ['draw'], 0)
@@ -67,4 +67,4 @@ def geometer_cli(geometer_script, width, height, geometer_directory, output_dir,
 
 
 if __name__ == "__main__":
-    geometer_cli()
+    geometriq_cli()

@@ -1,4 +1,4 @@
-from math import sqrt
+from math import sqrt, tan, radians
 import itertools
 import random
 
@@ -41,6 +41,9 @@ class Point(object):
 
     def distance_to(self, other_point):
         return sqrt((self.x - other_point.x)**2 + (self.y - other_point.y)**2)
+
+    def is_basically(self, other_point):
+        return isclose(self.x, other_point.x) and isclose(self.y, other_point.y)
 
     def __repr__(self):
         return u'Point(x={}, y={})'.format(self.x, self.y)
@@ -200,8 +203,47 @@ class Line(Shape):
         canvas.draw_line(self.center, self.to_point, at_point, rotation, scale_x, scale_y)
 
     def contains(self, point):
+        if self.slope is None:
+            return isclose(self.center.x, point.x)
+        if self.slope == 0:
+            return isclose(self.center.y, point.y)
         return point and isclose(self.intercept,
                                  (point.y - self.slope * point.x))
+    
+    def compare(self, point):
+        """
+        Treat self as a bisector of the plane and determine which side the point is on.
+
+        Returns:
+
+        -1 if the point is "above" or "left" of the bisector
+        0 if the point is on the bisector
+        1 if the point is "below" or "right" of the bisector
+        """
+        if self.slope is None:  # vertical bisector, just compare .x value
+            if point.x < self.center.x:
+                return -1
+            if point.x == self.center.x:
+                return 0
+            if point.x > self.center.x:
+                return 1
+        
+        if self.slope == 0:  # horizontal bisector, just compare .y value
+            if point.y > self.center.y:
+                return -1
+            if point.y == self.center.y:
+                return 0
+            if point.y < self.center.y:
+                return 1
+        
+        other_intercept = point.y - (point.x * self.slope)
+
+        if other_intercept > self.intercept:
+            return -1
+        if other_intercept == self.intercept:
+            return 0
+        if other_intercept < self.intercept:
+            return 1
 
 
 class Edge(object):

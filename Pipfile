@@ -5,10 +5,14 @@ name = "pypi"
 
 [packages]
 click = "*"
-"e1839a8" = {path = ".", editable = true}
+e1839a8 = {path = ".",editable = true}
+geometriq = {editable = true,path = "."}
 
 [dev-packages]
 pylint = "*"
+setuptools = "*"
+wheel = "*"
+twine = "*"
 
 [requires]
 python_version = "3.6"
