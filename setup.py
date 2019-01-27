@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="geometriq",
-    version="0.0.1",
+    version="0.1dev",
     author="Zachery Bir",
     author_email="zbir@zacbir.net",
     description="A simple API for 2D graphics",
