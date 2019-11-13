@@ -40,7 +40,9 @@ class PythonistaCanvas(Canvas):
         self.canvas.move_to(point.x, point.y)
 
     def draw_line_to(self, point):
-        self.canvas.draw_line(self.current_point.x, self.current_point.y, point.x, point.y)
+        self.canvas.draw_line(
+            self.current_point.x, self.current_point.y, point.x, point.y
+        )
 
     def polygon(self, points):
         self.begin_path()
@@ -51,8 +53,12 @@ class PythonistaCanvas(Canvas):
         self.end_path()
 
     def draw_circle(self, center, radius):
-        self.canvas.fill_ellipse(center.x - radius, center.y - radius, radius * 2, radius * 2)
-        self.canvas.draw_ellipse(center.x - radius, center.y - radius, radius * 2, radius * 2)
+        self.canvas.fill_ellipse(
+            center.x - radius, center.y - radius, radius * 2, radius * 2
+        )
+        self.canvas.draw_ellipse(
+            center.x - radius, center.y - radius, radius * 2, radius * 2
+        )
 
     def save(self):
         self.canvas.end_updates()

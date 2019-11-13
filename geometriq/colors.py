@@ -3,10 +3,9 @@ from math import sqrt
 
 
 class Color(object):
-
     @classmethod
     def from_full_value(cls, r, g, b, a=255):
-        return cls(r/255.0, g/255.0, b/255.0, a/255.0)
+        return cls(r / 255.0, g / 255.0, b / 255.0, a / 255.0)
 
     def __init__(self, r, g, b, a=1.0, name=None):
         self.r = r
@@ -25,11 +24,16 @@ class Color(object):
         return self.r, self.g, self.b, alpha
 
     def int_rgba(self):
-        return int(self.r * 255.0), int(self.g * 255.0), int(self.b * 255.0), int(self.a * 255.0)
+        return (
+            int(self.r * 255.0),
+            int(self.g * 255.0),
+            int(self.b * 255.0),
+            int(self.a * 255.0),
+        )
 
     def shade(self):
         return self.__class__(self.r, self.g, self.b, random.random() * 0.5)
-        
+
     def midtone(self):
         return self.__class__(self.r, self.g, self.b, random.random() * 0.5 + 0.25)
 
@@ -46,7 +50,11 @@ class Color(object):
         return self.__class__(self.r, self.g, self.b, a)
 
     def distance_to(self, other_color):
-        return sqrt((other_color.r - self.r)**2 + (other_color.g - self.g)**2 + (other_color.b - self.b)**2) # + (other_color.a - self.a)**2)
+        return sqrt(
+            (other_color.r - self.r) ** 2
+            + (other_color.g - self.g) ** 2
+            + (other_color.b - self.b) ** 2
+        )  # + (other_color.a - self.a)**2)
 
     def gradient_to(self, other_color, steps):
         for s in range(steps):
@@ -55,9 +63,9 @@ class Color(object):
             new_b = self.b + (((other_color.b - self.b) * s) / steps)
             new_a = self.a + (((other_color.a - self.a) * s) / steps)
             yield self.__class__(new_r, new_g, new_b, new_a)
-    
+
     def __repr__(self):
-        return 'Color(r={}, g={}, b={}, a={})'.format(*self.rgba())
+        return "Color(r={}, g={}, b={}, a={})".format(*self.rgba())
 
     def naive_greyscale(self):
         g = (self.r + self.g + self.b) / 3.0
@@ -73,4 +81,3 @@ class Color(object):
 black = Color(0, 0, 0, 1)
 clear = Color(0, 0, 0, 0)
 white = Color(1, 1, 1, 1)
-

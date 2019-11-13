@@ -4,12 +4,15 @@ from .shapes import Point, Line
 
 
 class Grid(object):
-
     def __init__(self, start, size, iterations_wide, iterations_tall):
         self.start = start
         self.size = float(size)
-        self.iterations_wide = iterations_wide + (1 if iterations_wide % size == 0 else 0)
-        self.iterations_tall = iterations_tall + (1 if iterations_tall % size == 0 else 0)
+        self.iterations_wide = iterations_wide + (
+            1 if iterations_wide % size == 0 else 0
+        )
+        self.iterations_tall = iterations_tall + (
+            1 if iterations_tall % size == 0 else 0
+        )
 
         self.points = self._generate_points()
 
@@ -35,16 +38,26 @@ class Grid(object):
 
     def radial_sort(self, center):
         points = list(self.points)
-        return sorted(points, cmp=lambda a, b: cmp(a.distance_to(center), b.distance_to(center)))
+        return sorted(
+            points, cmp=lambda a, b: cmp(a.distance_to(center), b.distance_to(center))
+        )
 
     def linear_sort(self, line):
         points = list(self.points)
         if line.slope is None:  # vertical line shortcut
-            sorted_points = sorted(points, lambda a, b: cmp(abs(a.x - line.center.x), abs(b.x - line.center.x)))
+            sorted_points = sorted(
+                points,
+                lambda a, b: cmp(abs(a.x - line.center.x), abs(b.x - line.center.x)),
+            )
         elif line.slope == 0:  # horizontal line shortcut
-            sorted_points = sorted(points, lambda a, b: cmp(abs(a.y - line.center.y), abs(b.y - line.center.y)))
+            sorted_points = sorted(
+                points,
+                lambda a, b: cmp(abs(a.y - line.center.y), abs(b.y - line.center.y)),
+            )
         else:
-            sorted_points = sorted(points, lambda a, b: cmp(line.distance_to(a), line.distance_to(b)))
+            sorted_points = sorted(
+                points, lambda a, b: cmp(line.distance_to(a), line.distance_to(b))
+            )
 
         return sorted_points
 
@@ -97,7 +110,7 @@ class DiamondGrid(Grid):
     """
 
     def __init__(self, start, size, iterations_wide, iterations_tall):
-        self.step = sqrt(size**2 / 2)
+        self.step = sqrt(size ** 2 / 2)
         super(DiamondGrid, self).__init__(start, size, iterations_wide, iterations_tall)
 
     def _generate_points(self):
@@ -109,7 +122,7 @@ class DiamondGrid(Grid):
                 p_x = x * self.step
                 y_offset = 0 if x % 2 == 0 else self.step
                 p_y = y * self.step - y_offset
-                
+
                 points.update(self._mirrored_points(p_x, p_y, x, y))
 
         return points
@@ -121,9 +134,11 @@ class HorizontalHexagonGrid(Grid):
     """
 
     def __init__(self, start, size, iterations_wide, iterations_tall):
-        self.step = sqrt(size**2 - (size / 2)**2)
+        self.step = sqrt(size ** 2 - (size / 2) ** 2)
         self.r = sqrt(3) * size / 6
-        super(HorizontalHexagonGrid, self).__init__(start, size, iterations_wide, iterations_tall)
+        super(HorizontalHexagonGrid, self).__init__(
+            start, size, iterations_wide, iterations_tall
+        )
 
     def _offsets(self, x, y):
         y_offset = y * self.step
@@ -152,7 +167,9 @@ class VerticalHexagonGrid(Grid):
     def __init__(self, start, size, iterations_wide, iterations_tall):
         self.step = sqrt(size ** 2 - (size / 2) ** 2)
         self.r = sqrt(3) * size / 6
-        super(VerticalHexagonGrid, self).__init__(start, size, iterations_wide, iterations_tall)
+        super(VerticalHexagonGrid, self).__init__(
+            start, size, iterations_wide, iterations_tall
+        )
 
     def _offsets(self, x, y):
         y_offset = y * (self.size / 2)

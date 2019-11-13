@@ -26,40 +26,41 @@ def gen_color(r, g, b, name=None):
     return Color(r / 255.0, g / 255.0, b / 255.0, name=name)
 
 
-base03 = gen_color(0, 43, 54, 'base03')
-base02 = gen_color(7, 54, 66, 'base02')
-base01 = gen_color(88, 110, 117, 'base01')
-base00 = gen_color(101, 123, 131, 'base00')
-base0 = gen_color(131, 148, 150, 'base0')
-base1 = gen_color(147, 161, 161, 'base1')
-base2 = gen_color(238, 232, 213, 'base2')
-base3 = gen_color(253, 246, 227, 'base3')
-yellow = gen_color(181, 137, 0, 'yellow')
-orange = gen_color(203, 75, 22, 'orange')
-red = gen_color(220, 50, 47, 'red')
-magenta = gen_color(211, 54, 130, 'magenta')
-violet = gen_color(108, 113, 196, 'violet')
-blue = gen_color(38, 139, 210, 'blue')
-cyan = gen_color(42, 161, 152, 'cyan')
-green = gen_color(133, 153, 0, 'green')
+base03 = gen_color(0, 43, 54, "base03")
+base02 = gen_color(7, 54, 66, "base02")
+base01 = gen_color(88, 110, 117, "base01")
+base00 = gen_color(101, 123, 131, "base00")
+base0 = gen_color(131, 148, 150, "base0")
+base1 = gen_color(147, 161, 161, "base1")
+base2 = gen_color(238, 232, 213, "base2")
+base3 = gen_color(253, 246, 227, "base3")
+yellow = gen_color(181, 137, 0, "yellow")
+orange = gen_color(203, 75, 22, "orange")
+red = gen_color(220, 50, 47, "red")
+magenta = gen_color(211, 54, 130, "magenta")
+violet = gen_color(108, 113, 196, "violet")
+blue = gen_color(38, 139, 210, "blue")
+cyan = gen_color(42, 161, 152, "cyan")
+green = gen_color(133, 153, 0, "green")
 
-solarized = [base03,
-             base02,
-             base01,
-             base00,
-             base0,
-             base1,
-             base2,
-             base3,
-             yellow,
-             orange,
-             red,
-             magenta,
-             violet,
-             blue,
-             cyan,
-             green,
-             ]
+solarized = [
+    base03,
+    base02,
+    base01,
+    base00,
+    base0,
+    base1,
+    base2,
+    base3,
+    yellow,
+    orange,
+    red,
+    magenta,
+    violet,
+    blue,
+    cyan,
+    green,
+]
 
 backgrounds = [base03, base02, base2, base3]
 

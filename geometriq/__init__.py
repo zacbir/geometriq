@@ -3,6 +3,7 @@ from .colors import *
 from .grids import *
 from .shapes import *
 from .solarized import *
+
 try:
     from .reference_image import *
 except ImportError:

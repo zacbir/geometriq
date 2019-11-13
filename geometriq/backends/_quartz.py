@@ -16,29 +16,24 @@ CGLineJoin = c_int32  # CGPath.h
 CGPathDrawingMode = c_int32  # CGContext.h
 CGColorRenderingIntent = c_int32  # CGColorSpace.h
 
+
 class CGPoint(Structure):
-    _fields_ = [
-        ('x', CGFloat),
-        ('y', CGFloat)
-    ]
+    _fields_ = [("x", CGFloat), ("y", CGFloat)]
+
 
 class CGSize(Structure):
-    _fields_ = [
-        ('width', CGFloat),
-        ('height', CGFloat)
-    ]
+    _fields_ = [("width", CGFloat), ("height", CGFloat)]
+
 
 class CGRect(Structure):
-    _fields_ = [
-        ('origin', CGPoint),
-        ('size', CGSize)
-    ]
+    _fields_ = [("origin", CGPoint), ("size", CGSize)]
+
 
 ##############
 # Constants
 #
 
-kCGColorSpaceSRGB = ObjCInstance(c_void_p.in_dll(quartz, 'kCGColorSpaceSRGB'))
+kCGColorSpaceSRGB = ObjCInstance(c_void_p.in_dll(quartz, "kCGColorSpaceSRGB"))
 kCGImageAlphaPremultipliedLast = 1
 kCGPathFillStroke = 3
 kCGRenderingIntentDefault = 0
@@ -53,10 +48,23 @@ kCGLineCapSquare = 2
 # Functions
 
 quartz.CFURLCreateFromFileSystemRepresentation.restype = c_void_p
-quartz.CFURLCreateFromFileSystemRepresentation.argtypes = [c_void_p, c_char_p, c_size_t, c_bool]
+quartz.CFURLCreateFromFileSystemRepresentation.argtypes = [
+    c_void_p,
+    c_char_p,
+    c_size_t,
+    c_bool,
+]
 
 quartz.CGBitmapContextCreate.restype = c_void_p
-quartz.CGBitmapContextCreate.argtypes = [c_void_p, c_size_t, c_size_t, c_size_t, c_size_t, c_void_p, CGBitmapInfo]
+quartz.CGBitmapContextCreate.argtypes = [
+    c_void_p,
+    c_size_t,
+    c_size_t,
+    c_size_t,
+    c_size_t,
+    c_void_p,
+    CGBitmapInfo,
+]
 
 quartz.CGBitmapContextCreateImage.restype = c_void_p
 quartz.CGBitmapContextCreateImage.argtypes = [c_void_p]
@@ -67,15 +75,37 @@ quartz.CGColorSpaceCreateDeviceRGB.argtypes = []
 quartz.CGColorSpaceCreateWithName.restype = c_void_p
 quartz.CGColorSpaceCreateWithName.argtypes = [c_void_p]
 
-quartz.CGContextAddArc.argtypes = [c_void_p, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, c_int]
+quartz.CGContextAddArc.argtypes = [
+    c_void_p,
+    CGFloat,
+    CGFloat,
+    CGFloat,
+    CGFloat,
+    CGFloat,
+    c_int,
+]
 
-quartz.CGContextAddCurveToPoint.argtypes = [c_void_p, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat]
+quartz.CGContextAddCurveToPoint.argtypes = [
+    c_void_p,
+    CGFloat,
+    CGFloat,
+    CGFloat,
+    CGFloat,
+    CGFloat,
+    CGFloat,
+]
 
 quartz.CGContextAddEllipseInRect.argtypes = [c_void_p, CGRect]  # Double check
 
 quartz.CGContextAddLineToPoint.argtypes = [c_void_p, CGFloat, CGFloat]
 
-quartz.CGContextAddQuadCurveToPoint.argtypes = [c_void_p, CGFloat, CGFloat, CGFloat, CGFloat]
+quartz.CGContextAddQuadCurveToPoint.argtypes = [
+    c_void_p,
+    CGFloat,
+    CGFloat,
+    CGFloat,
+    CGFloat,
+]
 
 quartz.CGContextAddRect.argtypes = [c_void_p, CGRect]  # Double check
 
@@ -102,9 +132,21 @@ quartz.CGContextSetLineWidth.argtypes = [c_void_p, CGFloat]
 
 quartz.CGContextSetMiterLimit.argtypes = [c_void_p, CGFloat]
 
-quartz.CGContextSetRGBFillColor.argtypes = [c_void_p, CGFloat, CGFloat, CGFloat, CGFloat]
+quartz.CGContextSetRGBFillColor.argtypes = [
+    c_void_p,
+    CGFloat,
+    CGFloat,
+    CGFloat,
+    CGFloat,
+]
 
-quartz.CGContextSetRGBStrokeColor.argtypes = [c_void_p, CGFloat, CGFloat, CGFloat, CGFloat]
+quartz.CGContextSetRGBStrokeColor.argtypes = [
+    c_void_p,
+    CGFloat,
+    CGFloat,
+    CGFloat,
+    CGFloat,
+]
 
 quartz.CGContextTranslateCTM.argtypes = [c_void_p, CGFloat, CGFloat]
 
@@ -112,15 +154,30 @@ quartz.CGDataProviderCreateWithFilename.restype = c_void_p
 quartz.CGDataProviderCreateWithFilename.argtypes = [c_char_p]
 
 quartz.CGImageCreateWithJPEGDataProvider.restype = c_void_p
-quartz.CGImageCreateWithJPEGDataProvider.argtypes = [c_void_p, POINTER(CGFloat), c_bool, CGColorRenderingIntent]
+quartz.CGImageCreateWithJPEGDataProvider.argtypes = [
+    c_void_p,
+    POINTER(CGFloat),
+    c_bool,
+    CGColorRenderingIntent,
+]
 
 quartz.CGImageCreateWithPNGDataProvider.restype = c_void_p
-quartz.CGImageCreateWithPNGDataProvider.argtypes = [c_void_p, POINTER(CGFloat), c_bool, CGColorRenderingIntent]
+quartz.CGImageCreateWithPNGDataProvider.argtypes = [
+    c_void_p,
+    POINTER(CGFloat),
+    c_bool,
+    CGColorRenderingIntent,
+]
 
 quartz.CGImageDestinationAddImage.argtypes = [c_void_p, c_void_p, c_void_p]
 
 quartz.CGImageDestinationCreateWithURL.restype = c_void_p
-quartz.CGImageDestinationCreateWithURL.argtypes = [c_void_p, c_void_p, c_size_t, c_void_p]
+quartz.CGImageDestinationCreateWithURL.argtypes = [
+    c_void_p,
+    c_void_p,
+    c_size_t,
+    c_void_p,
+]
 
 quartz.CGImageDestinationFinalize.restype = c_bool
 quartz.CGImageDestinationFinalize.argtypes = [c_void_p]
@@ -164,18 +221,22 @@ def CGImageDestinationCreateWithURL(a, b, c, d):
     # arg 2 needs to be nsstring
     return quartz.CGImageDestinationCreateWithURL(a, ns(b), c, d)
 
+
 def CGBitmapContextCreate(a, b, c, d, e, f, g):
     return ObjCInstance(quartz.CGBitmapContextCreate(a, b, c, d, e, f, g))
+
 
 def CGBitmapContextCreateImage(a):
     return ObjCInstance(quartz.CGBitmapContextCreateImage(a))
 
+
 def CGDataProviderCreateWithFilename(a):
     return ObjCInstance(quartz.CGDataProviderCreateWithFilename(a.encode()))
 
+
 def CGImageCreateWithJPEGDataProvider(a, b, c, d):
     return ObjCInstance(quartz.CGImageCreateWithJPEGDataProvider(a, b, c, d))
-    
+
+
 def CGImageCreateWithPNGDataProvider(a, b, c, d):
     return ObjCInstance(quartz.CGImageCreateWithPNGDataProvider(a, b, c, d))
-

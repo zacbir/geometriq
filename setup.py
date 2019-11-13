@@ -19,12 +19,12 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ),
     install_requires=[
-        'click >= 6.0',
-        'opensimplex >= 0.2',
-        'pyobjc;platform_system=="Darwin"',
+        "click >= 6.0",
+        "opensimplex >= 0.2",
+        "pyobjc;platform_system=='Darwin'",
     ],
-    entry_points='''
+    entry_points="""
         [console_scripts]
         geometriq=geometriq_cli:geometriq_cli
-    ''',    
+    """,
 )

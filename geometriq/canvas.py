@@ -5,12 +5,15 @@ from .shapes import Point, origin
 
 
 def log_on_call(f):
-
     def log_and_call(*args, **kw):
         args_join = ", ".join([repr(x) for x in args[1:]])
-        kw_join = ", ".join(['{}={}'.format(repr(k), repr(v)) for (k, v) in kw.items()])
+        kw_join = ", ".join(["{}={}".format(repr(k), repr(v)) for (k, v) in kw.items()])
 
-        args[0].log("canvas.{}({}{})".format(f.__name__, args_join, ", {}".format(kw_join) if kw_join else ""))
+        args[0].log(
+            "canvas.{}({}{})".format(
+                f.__name__, args_join, ", {}".format(kw_join) if kw_join else ""
+            )
+        )
 
         return f(*args, **kw)
 
@@ -18,7 +21,6 @@ def log_on_call(f):
 
 
 class StrokeWidthContext:
-
     def __init__(self, canvas, stroke_width):
         self.canvas = canvas
         self.old_width = canvas.stroke_width
@@ -26,13 +28,12 @@ class StrokeWidthContext:
 
     def __enter__(self):
         self.canvas.set_stroke_width(self.new_width)
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.canvas.set_stroke_width(self.old_width)
 
 
 class StrokeColorContext:
-
     def __init__(self, canvas, stroke_color):
         self.canvas = canvas
         self.old_color = canvas.stroke_color
@@ -46,15 +47,14 @@ class StrokeColorContext:
 
 
 class FillColorContext:
-
     def __init__(self, canvas, fill_color):
         self.canvas = canvas
         self.old_color = canvas.fill_color
         self.new_color = fill_color
-    
+
     def __enter__(self):
         self.canvas.set_fill_color(self.new_color)
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.canvas.set_fill_color(self.old_color)
 
@@ -81,10 +81,14 @@ class Canvas(object):
         self.stroke_color = None
         self.fill_color = None
         self.log_file = "{}.log".format(self.name)
-        self.log("canvas = {}({}, {}, {})".format(self.__class__.__name__, repr(name), repr(width), repr(height)))
+        self.log(
+            "canvas = {}({}, {}, {})".format(
+                self.__class__.__name__, repr(name), repr(width), repr(height)
+            )
+        )
 
     def log(self, msg):
-        with open(self.log_file, 'a+') as log:
+        with open(self.log_file, "a+") as log:
             log.write("{}\n".format(msg))
 
     @property
@@ -93,20 +97,27 @@ class Canvas(object):
 
     @property
     def corners(self):
-        return (origin, Point(0, self.height), Point(self.width, self.height), Point(self.width, 0))
-        
+        return (
+            origin,
+            Point(0, self.height),
+            Point(self.width, self.height),
+            Point(self.width, 0),
+        )
+
     @property
     def diagonal(self):
         return sqrt(self.width * self.width + self.height * self.height)
-    
+
     def random_point(self):
         return Point(random.random() * self.width, random.random() * self.height)
-        
+
     def longest_distance_from(self, point):
         return max([point.distance_to(x) for x in self.corners])
 
     def point_outside(self, point):
-        return point.x < 0 or point.x > self.width or point.y < 0 or point.y > self.height
+        return (
+            point.x < 0 or point.x > self.width or point.y < 0 or point.y > self.height
+        )
 
     @log_on_call
     def set_line_join(self, join_style):
@@ -137,31 +148,66 @@ class Canvas(object):
         pass
 
     @log_on_call
-    def draw_line(self, from_point, to_point, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+    def draw_line(
+        self, from_point, to_point, at_point=origin, rotation=0, scale_x=1, scale_y=None
+    ):
         pass
 
     @log_on_call
-    def draw_curve(self, points, control_points, control_points_cubic=None, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+    def draw_curve(
+        self,
+        points,
+        control_points,
+        control_points_cubic=None,
+        at_point=origin,
+        rotation=0,
+        scale_x=1,
+        scale_y=None,
+    ):
         pass
 
     @log_on_call
-    def draw_arc(self, radius, angle, center, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+    def draw_arc(
+        self,
+        radius,
+        angle,
+        center,
+        at_point=origin,
+        rotation=0,
+        scale_x=1,
+        scale_y=None,
+    ):
         pass
 
     @log_on_call
-    def draw_polygon(self, points, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+    def draw_polygon(
+        self, points, at_point=origin, rotation=0, scale_x=1, scale_y=None
+    ):
         pass
 
     @log_on_call
-    def draw_polycurves(self, curves, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+    def draw_polycurves(
+        self, curves, at_point=origin, rotation=0, scale_x=1, scale_y=None
+    ):
         pass
 
     @log_on_call
-    def draw_circle(self, radius, center,  at_point=origin, rotation=0, scale_x=1, scale_y=None):
+    def draw_circle(
+        self, radius, center, at_point=origin, rotation=0, scale_x=1, scale_y=None
+    ):
         pass
 
     @log_on_call
-    def draw_circular_segment(self, radius, angle, center, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+    def draw_circular_segment(
+        self,
+        radius,
+        angle,
+        center,
+        at_point=origin,
+        rotation=0,
+        scale_x=1,
+        scale_y=None,
+    ):
         pass
 
     @log_on_call

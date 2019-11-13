@@ -5,21 +5,23 @@ from ..shapes import origin
 
 
 class ContextTranslator:
-
     def __init__(self, context, translation_point):
         self.context = context
         self.translation_point = translation_point
 
     def __enter__(self):
-        CGContextTranslateCTM(self.context, self.translation_point.x, self.translation_point.y)
+        CGContextTranslateCTM(
+            self.context, self.translation_point.x, self.translation_point.y
+        )
         return self.context
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        CGContextTranslateCTM(self.context, -self.translation_point.x, -self.translation_point.y)
+        CGContextTranslateCTM(
+            self.context, -self.translation_point.x, -self.translation_point.y
+        )
 
 
 class ContextRotator:
-
     def __init__(self, context, rotation):
         self.context = context
         self.rotation = rotation
@@ -33,7 +35,6 @@ class ContextRotator:
 
 
 class ContextScalor:
-
     def __init__(self, context, scale_x, scale_y=None):
         self.context = context
         self.scale_x = scale_x
@@ -48,13 +49,20 @@ class ContextScalor:
 
 
 class CoreGraphicsCanvas(Canvas):
-
     def __init__(self, name, width, height=None, debug=False):
         height = height if height else width
         super(CoreGraphicsCanvas, self).__init__(name, width, height)
 
         self.colorSpace = CGColorSpaceCreateDeviceRGB()
-        self.context = CGBitmapContextCreate(None, width, height, 8, width * 4, self.colorSpace, kCGImageAlphaPremultipliedLast)
+        self.context = CGBitmapContextCreate(
+            None,
+            width,
+            height,
+            8,
+            width * 4,
+            self.colorSpace,
+            kCGImageAlphaPremultipliedLast,
+        )
 
         self.debug = debug
         self.operation_count = 0
@@ -99,7 +107,9 @@ class CoreGraphicsCanvas(Canvas):
             self.operation_count += 1
 
     @log_on_call
-    def draw_line(self, from_point, to_point, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+    def draw_line(
+        self, from_point, to_point, at_point=origin, rotation=0, scale_x=1, scale_y=None
+    ):
         with ContextScalor(self.context, scale_x, scale_y) as s_context:
             with ContextTranslator(s_context, at_point) as t_context:
                 with ContextRotator(t_context, rotation) as r_t_context:
@@ -111,49 +121,86 @@ class CoreGraphicsCanvas(Canvas):
             self.operation_count += 1
 
     @log_on_call
-    def draw_curve(self, points, control_points, control_points_cubic=None, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+    def draw_curve(
+        self,
+        points,
+        control_points,
+        control_points_cubic=None,
+        at_point=origin,
+        rotation=0,
+        scale_x=1,
+        scale_y=None,
+    ):
         with ContextScalor(self.context, scale_x, scale_y) as s_context:
             with ContextTranslator(s_context, at_point) as t_context:
                 with ContextRotator(t_context, rotation) as r_t_context:
                     CGContextMoveToPoint(r_t_context, points[0].x, points[0].y)
                     point_pairs = list(zip(points[:-1], points[1:]))
                     if control_points_cubic:
-                        control_point_pairs = list(zip(control_points, control_points_cubic))
+                        control_point_pairs = list(
+                            zip(control_points, control_points_cubic)
+                        )
                     else:
-                        control_point_pairs = list(zip(control_points, [None for x in range(len(control_points))]))
+                        control_point_pairs = list(
+                            zip(
+                                control_points,
+                                [None for x in range(len(control_points))],
+                            )
+                        )
                     for i, (start, end) in enumerate(point_pairs):
                         cp1, cp2 = control_point_pairs[i]
                         if cp2:
-                            CGContextAddCurveToPoint(r_t_context, cp1.x, cp1.y, cp2.x, cp2.y, end.x, end.y)
+                            CGContextAddCurveToPoint(
+                                r_t_context, cp1.x, cp1.y, cp2.x, cp2.y, end.x, end.y
+                            )
                         else:
-                            CGContextAddQuadCurveToPoint(r_t_context, cp1.x, cp1.y, end.x, end.y)
+                            CGContextAddQuadCurveToPoint(
+                                r_t_context, cp1.x, cp1.y, end.x, end.y
+                            )
                     CGContextDrawPath(r_t_context, kCGPathFillStroke)
         if self.debug:
             self.save()
             self.operation_count += 1
 
     @log_on_call
-    def draw_arc(self, radius, angle, center, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+    def draw_arc(
+        self,
+        radius,
+        angle,
+        center,
+        at_point=origin,
+        rotation=0,
+        scale_x=1,
+        scale_y=None,
+    ):
         with ContextScalor(self.context, scale_x, scale_y) as s_context:
             with ContextTranslator(s_context, at_point) as t_context:
                 with ContextRotator(t_context, rotation) as r_t_context:
-                    CGContextAddArc(r_t_context, center.x, center.y, radius, 0, angle, 0)
+                    CGContextAddArc(
+                        r_t_context, center.x, center.y, radius, 0, angle, 0
+                    )
                     CGContextDrawPath(r_t_context, kCGPathFillStroke)
         if self.debug:
             self.save()
             self.operation_count += 1
 
     @log_on_call
-    def draw_polygon(self, points, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+    def draw_polygon(
+        self, points, at_point=origin, rotation=0, scale_x=1, scale_y=None
+    ):
         drawn_points = list(points)
         with ContextScalor(self.context, scale_x, scale_y) as s_context:
             with ContextTranslator(s_context, at_point) as t_context:
                 with ContextRotator(t_context, rotation) as r_t_context:
                     starting_point = drawn_points.pop(0)
-                    CGContextMoveToPoint(r_t_context, starting_point.x, starting_point.y)
+                    CGContextMoveToPoint(
+                        r_t_context, starting_point.x, starting_point.y
+                    )
                     for next_point in drawn_points:
                         CGContextAddLineToPoint(r_t_context, next_point.x, next_point.y)
-                    CGContextAddLineToPoint(r_t_context, starting_point.x, starting_point.y)
+                    CGContextAddLineToPoint(
+                        r_t_context, starting_point.x, starting_point.y
+                    )
                     CGContextClosePath(r_t_context)
                     CGContextDrawPath(r_t_context, kCGPathFillStroke)
         if self.debug:
@@ -161,29 +208,49 @@ class CoreGraphicsCanvas(Canvas):
             self.operation_count += 1
 
     @log_on_call
-    def draw_polycurves(self, curves, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+    def draw_polycurves(
+        self, curves, at_point=origin, rotation=0, scale_x=1, scale_y=None
+    ):
         pass
 
     @log_on_call
-    def draw_circle(self, radius, center,  at_point=origin, rotation=0, scale_x=1, scale_y=None):
+    def draw_circle(
+        self, radius, center, at_point=origin, rotation=0, scale_x=1, scale_y=None
+    ):
         with ContextScalor(self.context, scale_x, scale_y) as s_context:
             with ContextTranslator(s_context, at_point) as t_context:
                 with ContextRotator(t_context, rotation) as r_t_context:
-                    CGContextAddEllipseInRect(r_t_context,
-                                              CGRect((center.x - radius, center.y - radius), (radius * 2, radius * 2)))
+                    CGContextAddEllipseInRect(
+                        r_t_context,
+                        CGRect(
+                            (center.x - radius, center.y - radius),
+                            (radius * 2, radius * 2),
+                        ),
+                    )
                     CGContextDrawPath(r_t_context, kCGPathFillStroke)
         if self.debug:
             self.save()
             self.operation_count += 1
 
     @log_on_call
-    def draw_circular_segment(self, radius, angle, center, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+    def draw_circular_segment(
+        self,
+        radius,
+        angle,
+        center,
+        at_point=origin,
+        rotation=0,
+        scale_x=1,
+        scale_y=None,
+    ):
         with ContextScalor(self.context, scale_x, scale_y) as s_context:
             with ContextTranslator(s_context, at_point) as t_context:
                 with ContextRotator(t_context, rotation) as r_t_context:
                     CGContextMoveToPoint(r_t_context, center.x, center.y)
                     CGContextAddLineToPoint(r_t_context, center.x + radius, center.y)
-                    CGContextAddArc(r_t_context, center.x, center.y, radius, 0, angle, 0)
+                    CGContextAddArc(
+                        r_t_context, center.x, center.y, radius, 0, angle, 0
+                    )
                     CGContextAddLineToPoint(r_t_context, center.x, center.y)
                     CGContextDrawPath(r_t_context, kCGPathFillStroke)
         if self.debug:
@@ -193,10 +260,11 @@ class CoreGraphicsCanvas(Canvas):
     @log_on_call
     def save(self):
         image = CGBitmapContextCreateImage(self.context)
-        filename = "{}{}.png".format(self.name, "-{:05}".format(self.operation_count) if self.debug else "")
+        filename = "{}{}.png".format(
+            self.name, "-{:05}".format(self.operation_count) if self.debug else ""
+        )
         url = NSURL.fileURLWithPath_(filename)
-        dest = CGImageDestinationCreateWithURL(url, 'public.png', 1, None)
+        dest = CGImageDestinationCreateWithURL(url, "public.png", 1, None)
         CGImageDestinationAddImage(dest, image, None)
         CGImageDestinationFinalize(dest)
         return filename
-
