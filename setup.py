@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="geometriq",
-    version="0.1dev",
+    version="0.2dev",
     author="Zachery Bir",
     author_email="zbir@zacbir.net",
     description="A simple API for 2D graphics",
@@ -20,10 +20,11 @@ setuptools.setup(
     ),
     install_requires=[
         'click >= 6.0',
+        'opensimplex >= 0.2',
         'pyobjc;platform_system=="Darwin"',
     ],
     entry_points='''
         [console_scripts]
-        geometriq=geometriq.scripts:geometriq_cli
+        geometriq=geometriq_cli:geometriq_cli
     ''',    
 )

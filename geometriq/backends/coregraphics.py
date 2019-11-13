@@ -1,5 +1,3 @@
-from math import radians
-
 from .quartz import *
 from ..canvas import Canvas, log_on_call
 
@@ -24,7 +22,7 @@ class ContextRotator:
 
     def __init__(self, context, rotation):
         self.context = context
-        self.rotation = radians(rotation)
+        self.rotation = rotation
 
     def __enter__(self):
         CGContextRotateCTM(self.context, self.rotation)
@@ -95,7 +93,7 @@ class CoreGraphicsCanvas(Canvas):
     def fill_background(self):
         r = CGRect((0, 0), (self.width, self.height))
         CGContextAddRect(self.context, r)
-        CGContextDrawPath(self.context, kCGPathFillStroke)
+        CGContextDrawPath(self.context, kCGPathFill)
         if self.debug:
             self.save()
             self.operation_count += 1
@@ -139,7 +137,7 @@ class CoreGraphicsCanvas(Canvas):
         with ContextScalor(self.context, scale_x, scale_y) as s_context:
             with ContextTranslator(s_context, at_point) as t_context:
                 with ContextRotator(t_context, rotation) as r_t_context:
-                    CGContextAddArc(r_t_context, center.x, center.y, radius, 0, radians(angle), 0)
+                    CGContextAddArc(r_t_context, center.x, center.y, radius, 0, angle, 0)
                     CGContextDrawPath(r_t_context, kCGPathFillStroke)
         if self.debug:
             self.save()
@@ -185,7 +183,7 @@ class CoreGraphicsCanvas(Canvas):
                 with ContextRotator(t_context, rotation) as r_t_context:
                     CGContextMoveToPoint(r_t_context, center.x, center.y)
                     CGContextAddLineToPoint(r_t_context, center.x + radius, center.y)
-                    CGContextAddArc(r_t_context, center.x, center.y, radius, 0, radians(angle), 0)
+                    CGContextAddArc(r_t_context, center.x, center.y, radius, 0, angle, 0)
                     CGContextAddLineToPoint(r_t_context, center.x, center.y)
                     CGContextDrawPath(r_t_context, kCGPathFillStroke)
         if self.debug:

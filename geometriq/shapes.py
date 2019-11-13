@@ -1,4 +1,4 @@
-from math import sqrt, tan, radians
+from math import pi, sqrt
 import itertools
 import random
 
@@ -40,13 +40,15 @@ class Point(object):
         return Point(-self.x, -self.y)
 
     def distance_to(self, other_point):
-        return sqrt((self.x - other_point.x)**2 + (self.y - other_point.y)**2)
+        return sqrt((self.x - other_point.x)**2 +
+                    (self.y - other_point.y)**2)
 
     def is_basically(self, other_point):
-        return isclose(self.x, other_point.x) and isclose(self.y, other_point.y)
+        return (isclose(self.x, other_point.x) and
+                isclose(self.y, other_point.y))
 
     def __repr__(self):
-        return u'Point(x={}, y={})'.format(self.x, self.y)
+        return f"Point(x={self.x}, y={self.y})"
 
     def __key(self):
         return self.x - 0, self.y - 0
@@ -296,16 +298,6 @@ class Rectangle(Line):
         canvas.draw_polygon(points, at_point, rotation, scale_x, scale_y)
 
 
-class Arc(Shape):
-
-    def __init__(self, size, angle, center=origin):
-        super(Arc, self).__init__(size, center)
-        self.angle = angle
-
-    def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
-        canvas.draw_arc(self.size, self.angle, self.center, at_point, rotation, scale_x, scale_y)
-
-
 class Curve(Shape):
 
     def __init__(self, points, control_points, control_points_cubic=[], center=origin):
@@ -318,16 +310,127 @@ class Curve(Shape):
         canvas.draw_curve(self.points, self.control_points, self.control_points_cubic, at_point, rotation, scale_x, scale_y)
 
 
+class SplineCurve(Shape):
+
+    def __init__(self, points, closed=False):
+        self.points = points
+        self.closed = closed
+        self.first_control_points, self.second_control_points = self.generate_control_points(points)
+
+    def generate_control_points(self, points):
+        count = len(points) - 1
+
+        first_control_points = [None for x in range(count)]
+        second_control_points = []
+        
+        if count == 1:
+            p0 = points[0]
+            p3 = points[1]
+
+            p1 = Point((2 * p0.x + p3.x) / 3, (2 * p0.y + p3.y) / 3)
+            first_control_points = [p1]
+
+            p2 = Point((2 * p1.x - p0.x), (2 * p1.y - p0.y))
+            second_control_points = [p2]
+
+        else:
+            rhs = []
+            a = []
+            b = []
+            c = []
+            
+            for i in range(count):
+                p0 = points[i]
+                p3 = points[i + 1]
+
+                if i == 0:
+                    a.append(0)
+                    b.append(2)
+                    c.append(1)
+                    rhs_point = Point((p0.x + 2 * p3.x), (p0.y + 2 * p3.y))
+                elif i == count - 1:
+                    a.append(2)
+                    b.append(7)
+                    c.append(0)
+                    rhs_point = Point((8 * p0.x + p3.x), (8 * p0.y + p3.y))
+                else:
+                    a.append(1)
+                    b.append(4)
+                    c.append(1)
+                    rhs_point = Point((4 * p0.x + 2 * p3.x), (4 * p0.y + 2 * p3.y))
+
+                rhs.append(rhs_point)
+
+            for j in range(1, count):
+                rhs_point = rhs[j]
+                prev_rhs_point = rhs[j - 1]
+
+                m = a[j] / b[j - 1]
+                b1 = b[j] - m * c[j - 1]
+                b[j] = b1
+
+                new_rhs_point = Point((rhs_point.x - m * prev_rhs_point.x), (rhs_point.y - m * prev_rhs_point.y))
+                rhs[j] = new_rhs_point
+
+            last_rhs_point = rhs[count - 1]
+            last_control_point = Point((last_rhs_point.x / b[count - 1]), (last_rhs_point.y / b[count - 1]))
+            first_control_points[count - 1] = last_control_point
+
+            for f in range(count - 1, -1, -1):
+                try:
+                    next_control_point = first_control_points[f + 1]
+                except IndexError:
+                    continue
+                this_rhs_point = rhs[f]
+                this_control_point = Point((this_rhs_point.x - c[f] * next_control_point.x) / b[f],
+                                           (this_rhs_point.y - c[f] * next_control_point.y) / b[f])
+                first_control_points[f] = this_control_point
+
+            for s in range(count):
+                p3 = points[s + 1]
+
+                if s == count - 1:
+                    try:
+                        p1 = first_control_points[s]
+                    except IndexError:
+                        continue
+
+                    second_control_point = Point((p3.x + p1.x) / 2, (p3.y + p1.y) / 2)
+                else:
+                    try:
+                        next_p1 = first_control_points[s + 1]
+                    except IndexError:
+                        continue
+
+                    second_control_point = Point(2 * p3.x - next_p1.x, 2 * p3.y - next_p1.y)
+
+                second_control_points.append(second_control_point)
+                
+        return first_control_points, second_control_points
+
+    def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+        canvas.draw_curve(self.points, self.first_control_points, self.second_control_points, at_point, rotation, scale_x, scale_y)
+
+class Arc(Shape):
+
+    def __init__(self, size, angle, center=origin):
+        super(Arc, self).__init__(size, center)
+        self.angle = angle
+
+    def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
+        canvas.draw_arc(self.size, self.angle, self.center, at_point, rotation, scale_x, scale_y)
+
+
 class QuarterCircle(Arc):
 
     def __init__(self, size, center=origin):
-        super(QuarterCircle, self).__init__(size, 90, center)
+        super(QuarterCircle, self).__init__(size, pi / 2, center)
 
 
 class HalfCircle(Arc):
 
     def __init__(self, size, center=origin):
-        super(HalfCircle, self).__init__(size, 180, center)
+        super(HalfCircle, self).__init__(size, pi, center)
 
 
 class CircleSegment(Shape):
@@ -343,13 +446,13 @@ class CircleSegment(Shape):
 class QuarterCircleSegment(CircleSegment):
 
     def __init__(self, size, center=origin):
-        super(QuarterCircleSegment, self).__init__(size, 90, center)
+        super(QuarterCircleSegment, self).__init__(size, pi / 2, center)
 
 
 class HalfCircleSegment(CircleSegment):
 
     def __init__(self, size, center=origin):
-        super(HalfCircleSegment, self).__init__(size, 180, center)
+        super(HalfCircleSegment, self).__init__(size, pi, center)
 
 
 class Circle(Shape):
