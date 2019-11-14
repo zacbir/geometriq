@@ -79,7 +79,7 @@ def geometriq_cli(
     sys.path.append(geometriq_directory)
 
     dimensions = dimensions if "_" in dimensions else devices[dimensions]
-    width, height = dimensions.split("_")
+    width, height = [int(x) for x in dimensions.split("_")]
 
     script_name = os.path.splitext(os.path.basename(geometriq_script))[0]
     dated_name = f"{script_name}_{width}x{height}_{seed}"

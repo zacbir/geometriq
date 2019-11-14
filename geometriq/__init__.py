@@ -25,3 +25,6 @@ def band(iterable, value, upper_bounds, lower_bounds=0, fuzz=False):
     idx = 0 if idx < 0 else idx
     idx = -1 if idx >= len(iterable) else idx
     return iterable[idx]
+
+def translate(value, istart, istop, ostart, ostop):
+    return ostart + (ostop - ostart) * ((value - istart) / (istop - istart))
