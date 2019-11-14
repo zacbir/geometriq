@@ -1,6 +1,8 @@
 from math import sqrt
 import random
 
+import opensimplex
+
 from .shapes import Point, origin
 
 
@@ -73,10 +75,13 @@ class Canvas(object):
     Subclasses define library-specific implementations of these basic tools
     """
 
-    def __init__(self, name, width, height):
+    def __init__(self, name, width, height, seed):
         self.name = name
         self.width = width
         self.height = height
+        self.seed = seed
+        self.random = random.Random(self.seed)
+        self.noise = opensimplex.OpenSimplex(self.seed)
         self.stroke_width = None
         self.stroke_color = None
         self.fill_color = None
@@ -109,7 +114,7 @@ class Canvas(object):
         return sqrt(self.width * self.width + self.height * self.height)
 
     def random_point(self):
-        return Point(random.random() * self.width, random.random() * self.height)
+        return Point(self.random.random() * self.width, self.random.random() * self.height)
 
     def longest_distance_from(self, point):
         return max([point.distance_to(x) for x in self.corners])

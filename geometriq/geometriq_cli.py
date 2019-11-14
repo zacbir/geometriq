@@ -2,46 +2,50 @@ from datetime import datetime
 from math import floor
 import os
 import os.path
-import random
 import sys
 from time import time
 
 import click
+import opensimplex
 
 from geometriq import *
 
 
 @click.command()
-@click.argument(
-    "geometriq-script", help='a script name (with or without the ".py" suffix)'
-)
-@click.argument(
-    "dimensions",
-    help='dimensions to use ("width_height") or a device name shorthand: "ipad" (1668x2388), "iphone" (1125x2436), "macbook" (1440x900), "4k" (3008x1692), "square" (4096x4096)',
+@click.option(
+    "--dimensions",
+    help="Dimensions to use, formatted as \"width_height\", or a device name shorthand: \"ipad\" (1668x2388), \"iphone\" (1125x2436), \"macbook\" (1440x900), \"4k\" (3008x1692), \"square\" (4096x4096). Defaults to \"square\".",
+    type=str,
+    default="square",
 )
 @click.option(
     "--geometriq-directory",
-    help="directory where geometriq scripts can be found",
+    help="Directory where geometriq scripts can be found. Can be set in $GEOMETRIQ_DIRECTORY. Defaults to the current directory.",
     type=click.Path(exists=True, file_okay=False, dir_okay=True),
     envvar="GEOMETRIQ_DIRECTORY",
+    default=".",
 )
 @click.option(
     "--output-dir",
-    help="directory where resulting images should be saved",
+    help="Directory where resulting images should be saved. Can be set in $GEOMETRIQ_OUTPUT_DIRECTORY. Defaults to the current directory.",
     type=click.Path(exists=True, file_okay=False, dir_okay=True),
     envvar="GEOMETRIQ_OUTPUT_DIRECTORY",
+    default=".",
 )
 @click.option(
     "--contrast",
     "-c",
-    help="contrast theme",
+    help="Contrast theme background. Defaults to \"light\"",
     type=click.Choice(["dark", "light", "black", "white", "clear"]),
     default="light",
 )
-@click.option("--seed", "-s", help="randomization seed", type=int)
+@click.option("--seed", "-s", help="Randomization seed. Defaults to the current time.", type=int)
+@click.argument("geometriq-script")
 def geometriq_cli(
-    geometriq_script, dimensions, geometriq_directory, output_dir, contrast, seed
+    dimensions, geometriq_directory, output_dir, contrast, seed, geometriq_script
 ):
+    """Generate art from a GEOMETRIQ_SCRIPT.
+    """
 
     devices = {
         "ipad": "1668_2388",
@@ -70,8 +74,6 @@ def geometriq_cli(
     if not seed:
         seed = floor(time())
 
-    random.seed(seed)
-
     DEBUG = os.getenv("GEOMETRIQ_DEBUG", False)
 
     sys.path.append(geometriq_directory)
@@ -87,7 +89,7 @@ def geometriq_cli(
     outputDir = os.path.join(os.path.dirname(os.path.realpath(__file__)), output_dir)
     filename = os.path.join(outputDir, "{}".format(dated_name))
 
-    canvas = CoreGraphicsCanvas(filename, width, height, debug=DEBUG)
+    canvas = CoreGraphicsCanvas(filename, width, height, seed, debug=DEBUG)
     canvas.set_miter_limit(15)
     canvas.set_line_cap(kCGLineCapRound)
     canvas.set_line_join(kCGLineJoinMiter)

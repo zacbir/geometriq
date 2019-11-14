@@ -25,6 +25,6 @@ setuptools.setup(
     ],
     entry_points="""
         [console_scripts]
-        geometriq=geometriq_cli:geometriq_cli
+        geometriq=geometriq.geometriq_cli:geometriq_cli
     """,
 )

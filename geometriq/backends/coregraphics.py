@@ -49,9 +49,8 @@ class ContextScalor:
 
 
 class CoreGraphicsCanvas(Canvas):
-    def __init__(self, name, width, height=None, debug=False):
-        height = height if height else width
-        super(CoreGraphicsCanvas, self).__init__(name, width, height)
+    def __init__(self, name, width, height, seed, debug=False):
+        super(CoreGraphicsCanvas, self).__init__(name, width, height, seed)
 
         self.colorSpace = CGColorSpaceCreateDeviceRGB()
         self.context = CGBitmapContextCreate(
