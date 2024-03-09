@@ -19,7 +19,7 @@ Simple geometric shape models.
 """
 
 
-class Point(object):
+class Point:
 
     """ A simple two-dimensional point. Has an x value and a y value, and can
     compute the distance to another point.
@@ -69,11 +69,17 @@ class Point(object):
     def __hash__(self):
         return hash(self.__key())
 
+    def __mul__(self, mag):
+        return Point(self.x * mag, self.y * mag)
+
+    def __rmul__(self, mag):
+        return Point(self.x * mag, self.y * mag)
+
 
 origin = Point(0, 0)
 
 
-class Shape(object):
+class Shape:
 
     """ A generic model for a regular polygon. Has a center Point(), and a
     size (though this is immaterial if its points are formed arbitrarily.
@@ -86,11 +92,11 @@ class Shape(object):
     [<Point x: 2, y: 1>]
     """
 
-    def __init__(self, size, center=origin, grid=None):
+    def __init__(self, size=0, points: list[Point] | None = None, center=origin, grid=None):
         self.center = center
         self.size = size
         self.grid = grid
-        self.points = []
+        self.points = points or []
 
     def paths(self):
         end_points = self.points[:]
@@ -106,6 +112,31 @@ class Shape(object):
         points_to_draw = filter(None, self.points)
         canvas.draw_polygon(points_to_draw, at_point, rotation, scale_x, scale_y)
 
+    @property
+    def area(self) -> float:
+        area = 0
+        for i in range(len(self.points)):
+            p1, p2 = self.points[i], self.points[(i + 1) % len(self.points)]
+            area += p1.x * p2.y - p2.x * p1.y
+        area *= 0.5
+
+        return area
+
+    @property
+    def centroid(self) -> Point:
+        x, y = 0, 0
+        area = self.area
+        for i in range(len(self.points)):
+            p1, p2 = self.points[i], self.points[(i + 1) % len(self.points)]
+            cross_product = (p1.x * p2.y - p2.x * p1.y)
+            x += (p1.x + p2.x) * cross_product
+            y += (p1.y + p2.y) * cross_product
+
+        if area:
+            return Point(x / (6 * area), y / (6 * area))
+        else:
+            return Point(x/6, y/6)
+
 
 class Line(Shape):
     @classmethod
@@ -119,8 +150,14 @@ class Line(Shape):
 
         return line
 
+    def __mul__(self, mag: float) -> "Line":
+        return Line(self.to_point * mag, self.center * mag)
+
+    def __rmul__(self, mag: float) -> "Line":
+        return Line(self.to_point * mag, self.center * mag)
+
     def __init__(self, to_point, center=origin):
-        super(Line, self).__init__(0, center)
+        super(Line, self).__init__(0, center=center)
         self.to_point = to_point
         try:
             self.slope = (self.center.y - self.to_point.y) / (
@@ -255,7 +292,7 @@ class Line(Shape):
             return 1
 
 
-class Edge(object):
+class Edge:
     def __init__(self, line, opposite_point):
         self.line = line
         self.opposite_point = opposite_point
@@ -264,7 +301,7 @@ class Edge(object):
         return "Edge with Line: {}, Opposite: {}".format(self.line, self.opposite_point)
 
 
-class ArbitraryTriangle(object):
+class ArbitraryTriangle:
     def __init__(self, points):
         self.points = (self.A, self.B, self.C) = points
 
