@@ -1,9 +1,9 @@
-from math import pi, sqrt
+from math import cos, pi, sin, sqrt
 import itertools
 import random
 
 
-def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
+def _isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
     return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
 
 
@@ -43,16 +43,13 @@ class Point(object):
         return sqrt((self.x - other_point.x) ** 2 + (self.y - other_point.y) ** 2)
 
     def is_basically(self, other_point):
-        return isclose(self.x, other_point.x) and isclose(self.y, other_point.y)
+        return _isclose(self.x, other_point.x) and _isclose(self.y, other_point.y)
 
     def __repr__(self):
         return f"Point(x={self.x}, y={self.y})"
 
     def __key(self):
         return self.x - 0, self.y - 0
-
-    def __cmp__(self, other):
-        return cmp((self.x, self.y), (other.x, other.y))
 
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y
@@ -217,10 +214,10 @@ class Line(Shape):
 
     def contains(self, point):
         if self.slope is None:
-            return isclose(self.center.x, point.x)
+            return _isclose(self.center.x, point.x)
         if self.slope == 0:
-            return isclose(self.center.y, point.y)
-        return point and isclose(self.intercept, (point.y - self.slope * point.x))
+            return _isclose(self.center.y, point.y)
+        return point and _isclose(self.intercept, (point.y - self.slope * point.x))
 
     def compare(self, point):
         """
@@ -525,6 +522,9 @@ class Circle(Shape):
                 return None
         else:
             return None
+
+    def point_at_angle(self, angle) -> Point:
+        return Point(self.size * cos(angle) + self.center.x, self.size * sin(angle) + self.center.y)
 
     def draw(self, canvas, at_point=origin, rotation=0, scale_x=1, scale_y=None):
         canvas.draw_circle(self.size, self.center, at_point, rotation, scale_x, scale_y)
