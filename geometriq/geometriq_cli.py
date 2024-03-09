@@ -48,11 +48,12 @@ def geometriq_cli(
     """
 
     devices = {
-        "ipad": "1668_2388",
-        "iphone": "1125_2436",
-        "macbook": "1440_900",
-        "4k": "3008_1692",
-        "square": "4096_4096",
+        "ipad": "1668x2388",
+        "iphone": "1125x2436",
+        "iphone15pm": "1290x2796",
+        "macbook": "1440x900",
+        "4k": "3008x1692",
+        "square": "4096x4096",
     }
 
     background_fills = {
@@ -78,8 +79,8 @@ def geometriq_cli(
 
     sys.path.append(geometriq_directory)
 
-    dimensions = dimensions if "_" in dimensions else devices[dimensions]
-    width, height = [int(x) for x in dimensions.split("_")]
+    dimensions = dimensions if "x" in dimensions else devices[dimensions]
+    width, height = [int(x) for x in dimensions.split("x")]
 
     script_name = os.path.splitext(os.path.basename(geometriq_script))[0]
     dated_name = f"{script_name}_{width}x{height}_{seed}"
