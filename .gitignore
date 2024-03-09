@@ -92,3 +92,5 @@ ENV/
 .envrc
 .vscode/
 output/
+
+.DS_Store
