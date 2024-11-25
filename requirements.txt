@@ -22,7 +22,7 @@ opensimplex==0.4.3
 pathspec==0.10.3
 pkginfo==1.9.2
 platformdirs==2.6.0
-Pygments==2.13.0
+Pygments==2.15.0
 pylint==2.15.9
 pyobjc==9.0.1
 pyobjc-core==9.0.1
